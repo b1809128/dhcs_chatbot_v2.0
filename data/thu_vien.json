@@ -1,0 +1,46 @@
+{
+  "thu_vien": [
+    {
+      "ten_sach": "Giáo trình Luật Hình sự",
+      "so_luong": 5,
+      "ke_sach": "Kệ A1 - Ngăn 2",
+      "tinh_trang": "Còn sách",
+      "thoi_gian_muon": "7 ngày"
+    },
+    {
+      "ten_sach": "Luật Tố tụng hình sự",
+      "so_luong": 0,
+      "ke_sach": "Kệ A2 - Ngăn 1",
+      "tinh_trang": "Hết sách",
+      "thoi_gian_muon": "7 ngày"
+    },
+    {
+      "ten_sach": "Nghiệp vụ Công an cơ bản",
+      "so_luong": 3,
+      "ke_sach": "Kệ B1 - Ngăn 3",
+      "tinh_trang": "Còn sách",
+      "thoi_gian_muon": "10 ngày"
+    },
+    {
+      "ten_sach": "Pháp luật đại cương",
+      "so_luong": 8,
+      "ke_sach": "Kệ C1 - Ngăn 1",
+      "tinh_trang": "Còn sách",
+      "thoi_gian_muon": "5 ngày"
+    },
+    {
+      "ten_sach": "Giáo trình Quản lý hành chính",
+      "so_luong": 2,
+      "ke_sach": "Kệ C2 - Ngăn 4",
+      "tinh_trang": "Còn sách",
+      "thoi_gian_muon": "6 ngày"
+    },
+    {
+      "ten_sach": "Kỹ thuật hình sự cơ bản",
+      "so_luong": 1,
+      "ke_sach": "Kệ D1 - Ngăn 2",
+      "tinh_trang": "Còn sách",
+      "thoi_gian_muon": "7 ngày"
+    }
+  ]
+}

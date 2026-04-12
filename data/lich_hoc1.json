@@ -1,0 +1,93 @@
+{
+  "lich_hoc": [
+    {
+      "lop": "DTHS3",
+      "mon_hoc": "Luật Tố tụng hình sự",
+      "phong_hoc": "B201",
+      "ngay": "2024-11-04",
+      "thu": "Thứ Hai",
+      "gio_bat_dau": "07:30",
+      "gio_ket_thuc": "11:00",
+      "giang_vien": "Thượng tá Nguyễn Văn A"
+    },
+    {
+      "lop": "QLHC",
+      "mon_hoc": "Quản lý hành chính nhà nước",
+      "phong_hoc": "B105",
+      "ngay": "2024-11-06",
+      "thu": "Thứ Tư",
+      "gio_bat_dau": "13:00",
+      "gio_ket_thuc": "16:30",
+      "giang_vien": "Thiếu tá Trần Thị B"
+    },
+    {
+      "lop": "THAHS",
+      "mon_hoc": "Kỹ thuật hình sự",
+      "phong_hoc": "C301",
+      "ngay": "2024-11-05",
+      "thu": "Thứ Ba",
+      "gio_bat_dau": "07:30",
+      "gio_ket_thuc": "11:00",
+      "giang_vien": "Đại tá Lê Văn C"
+    }
+  ],
+  "dths3": [
+    {
+      "lop": "DTHS3",
+      "mon_hoc": "Luật Tố tụng hình sự",
+      "phong_hoc": "B201",
+      "ngay": "2024-11-04",
+      "thu": "Thứ Hai",
+      "gio_bat_dau": "07:30",
+      "gio_ket_thuc": "11:00",
+      "giang_vien": "Thượng tá Nguyễn Văn A"
+    },
+    {
+      "lop": "DTHS3",
+      "mon_hoc": "Tin học",
+      "phong_hoc": "B203",
+      "ngay": "2026-4-10",
+      "thu": "Thứ Sáu",
+      "gio_bat_dau": "07:30",
+      "gio_ket_thuc": "11:00",
+      "giang_vien": "Thượng tá Nguyễn Văn A"
+    }
+  ],
+  "lich_thi": [
+    {
+      "lop": "DTHS",
+      "mon_thi": "Luật Tố tụng hình sự",
+      "phong_thi": "H001",
+      "ngay_thi": "2024-12-15",
+      "thu": "Chủ Nhật",
+      "gio_thi": "08:00",
+      "hinh_thuc": "Tự luận",
+      "thoi_gian": "90 phút"
+    },
+    {
+      "lop": "KTHS",
+      "mon_thi": "Kỹ thuật hình sự",
+      "phong_thi": "H003",
+      "ngay_thi": "2024-12-18",
+      "thu": "Thứ Tư",
+      "gio_thi": "14:00",
+      "hinh_thuc": "Trắc nghiệm + Tự luận",
+      "thoi_gian": "60 phút"
+    }
+  ],
+  "lich_cong_tac_tuan": {
+    "tuan": "Tuần 45 (04/11 - 10/11/2024)",
+    "su_kien": [
+      {
+        "ngay": "04/11",
+        "noi_dung": "Họp Hội đồng Khoa học - Đào tạo, 14:00, Phòng Họp A"
+      },
+      {
+        "ngay": "06/11",
+        "noi_dung": "Kiểm tra nề nếp học tập lớp QLHC, DTHS, 08:00"
+      },
+      { "ngay": "08/11", "noi_dung": "Nộp báo cáo kết quả rèn luyện tháng 10" }
+    ]
+
+  }
+}

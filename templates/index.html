@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PPU CHATBOT SYSTEM</title>
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='image/t05.ico') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <!-- <link rel="icon" href="{{ url_for('static', filename='image/t05.png') }}" /> -->
+  </head>
+  <body>
+    <div class="header-top">
+      <div class="logo-title">
+        <img
+          src="{{ url_for('static', filename='image/t05.png') }}"
+          class="logo"
+        />
+        <div class="title">
+          TRƯỜNG ĐẠI HỌC<br />
+          <span>CẢNH SÁT NHÂN DÂN</span>
+        </div>
+      </div>
+      <div class="dia_chi">
+        <i class="fa-solid fa-house dia_chi_icon"></i>Trụ sở chính: 36 Nguyễn
+        Hữu Thọ - Phường
+        <br />
+        Tân Hưng - TP. Hồ Chí Minh
+      </div>
+    </div>
+
+    <!-- MENU -->
+    <div class="chat-header">
+      <!-- LEFT -->
+      <div class="left">
+        <img
+          src="{{ url_for('static', filename='image/t05.png') }}"
+          class="logo"
+        />
+
+        <div class="title">
+          <div class="main">DEMO PPU CHATBOT</div>
+          <div class="sub">Hỗ trợ học viên T05</div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="right"></div>
+    </div>
+
+    <div class="chat-wrapper">
+      <div id="chat-box">
+        <!-- BOT INTRO -->
+        <div class="message-row">
+          <div class="avatar">
+            <img
+              src="{{ url_for('static', filename='image/chatbotai.png') }}"
+              class="bot-avatar-img"
+            />
+          </div>
+          <div class="message">
+            Xin chào! Tôi là trợ lý AI hỗ trợ học viên trường ĐHCS. Bạn cần hỏi
+            gì?
+            <hr />
+          </div>
+        </div>
+
+        <!-- SUGGEST -->
+        <div class="suggest-box">
+          <div class="suggest-title">🤔 Câu hỏi gợi ý cho bạn:</div>
+
+          <button class="suggest-btn" onclick="sendQuick('lịch học')">
+            💡 Lịch học tuần này?
+          </button>
+
+          <button class="suggest-btn" onclick="sendQuick('sách')">
+            💡 Sách hiện có trong thư viện?
+          </button>
+
+          <button class="suggest-btn" onclick="sendQuick('Công văn?')">
+            💡 Công văn mới nhất?
+          </button>
+          <button class="suggest-btn" onclick="sendQuick('Đoàn thanh niên?')">
+            💡 Thông tin về công tác Đảng - Đoàn?
+          </button>
+          <button class="suggest-btn" onclick="sendQuick('tuyển sinh')">
+            💡 Thông tin tuyển sinh?
+          </button>
+        </div>
+      </div>
+
+      <!-- INPUT -->
+      <div class="chat-input">
+        <div class="input-left"></div>
+
+        <input
+          id="user-input"
+          type="text"
+          placeholder="Nhập câu hỏi hoặc dán ảnh (Ctrl+V)..."
+        />
+
+        <button id="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+
+      <div class="note">
+        📋 Mọi thông tin pháp lý chính thức xin tham khảo văn bản trên
+        <a
+          href="https://www.dhcsnd.edu.vn"
+          style="color: #1c9608; font-weight: bold"
+          >Website/trang thông báo của trường ĐHCS</a
+        >
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

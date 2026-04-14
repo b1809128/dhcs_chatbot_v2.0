@@ -1,4 +1,4 @@
-from db_mysql import get_connection
+from db.mysql import get_connection
 
 
 def get_lich_hoc_by_lop(lop):

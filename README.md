@@ -8,15 +8,30 @@ Chạy hoàn toàn offline – không cần internet sau khi cài đặt.
 ```
 dhcs_chatbot/
 ├── app.py                  ← Server Flask chính
-├── requirements.txt
+├── app_mysql.py            ← Biến thể dùng MySQL
+├── db/
+│   ├── __init__.py
+│   └── mysql.py            ← Kết nối MySQL dùng lại cho service
+├── sandbox/
+│   ├── __init__.py
+│   ├── README.md
+│   ├── test.py             ← File backend thử nghiệm / nháp
+│   └── test.js             ← File frontend thử nghiệm / nháp
+├── services/
+│   └── lich_hoc_service.py
 ├── templates/
 │   └── index.html          ← Giao diện web
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── image/
+│   └── js/
+│       └── script.js       ← Frontend chính
 └── data/
-    ├── lich_hoc.json       ← Lịch học, lịch thi, lịch công tác
-    ├── cong_van.json       ← Công văn, thông tư
+    ├── lich_hoc.json       ← Lịch học, lịch thi
+    ├── ho_so.json          ← Công văn, thông tư, biểu mẫu
     ├── tai_lieu.json       ← Tài liệu nghiệp vụ
-    ├── the_xe.json         ← Quản lý thẻ xe
-    ├── ra_vao.json         ← Ra vào buổi chiều, ngày nghỉ
+    ├── thu_vien.json       ← Dữ liệu thư viện
     └── tuyen_sinh.json     ← Thông tin tuyển sinh CAND
 ```
 

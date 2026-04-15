@@ -3,6 +3,14 @@ const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
 
 const BOT_AVATAR_SRC = "/static/image/chatbotai.png";
+const ADMISSION_TITLES = new Set([
+  "TUYỂN SINH",
+  "BÀI THI ĐÁNH GIÁ",
+  "HỒ SƠ TUYỂN SINH",
+  "NGÀNH TUYỂN SINH",
+  "THÔNG TIN TRƯỜNG",
+  "LIÊN HỆ TUYỂN SINH",
+]);
 
 const FOLLOWUP_MAP = [
   {
@@ -204,6 +212,10 @@ function scrollToElement(element) {
   });
 }
 
+function updateHeaderScrollState() {
+  document.body.classList.toggle("is-chat-scrolled", chatBox.scrollTop > 24);
+}
+
 function setSendingState(isSending) {
   sendBtn.disabled = isSending;
   userInput.disabled = isSending;
@@ -246,6 +258,7 @@ function buildTypingHtml() {
 function showTyping() {
   removeTyping();
   appendRow(buildTypingHtml());
+  updateHeaderScrollState();
   scrollToBottom();
 }
 
@@ -269,10 +282,44 @@ function extractResponseContextValues(response) {
   return response.data.rows.flatMap((row) => Object.values(row || {}));
 }
 
+function getSuggestionLimit(response) {
+  return ADMISSION_TITLES.has(response?.data?.title) ? 8 : 4;
+}
+
+function uniqueSuggestions(suggestions, question, limit) {
+  const seen = new Set();
+  const normalizedQuestion = normalizeSuggestionText(question);
+
+  return suggestions
+    .filter((item) => {
+      const normalizedItem = normalizeSuggestionText(item);
+
+      if (!normalizedItem || normalizedItem === normalizedQuestion) {
+        return false;
+      }
+
+      if (seen.has(normalizedItem)) {
+        return false;
+      }
+
+      seen.add(normalizedItem);
+      return true;
+    })
+    .slice(0, limit);
+}
+
 function getFollowupSuggestions(question, response) {
   const directSuggestions = Array.isArray(response?.suggestions)
     ? response.suggestions
     : [];
+
+  if (directSuggestions.length > 0) {
+    return uniqueSuggestions(
+      directSuggestions,
+      question,
+      getSuggestionLimit(response),
+    );
+  }
 
   const contextParts = [
     question,
@@ -292,25 +339,11 @@ function getFollowupSuggestions(question, response) {
     }
   });
 
-  const seen = new Set();
-  const normalizedQuestion = normalizeSuggestionText(question);
-
-  return mergedSuggestions
-    .filter((item) => {
-      const normalizedItem = normalizeSuggestionText(item);
-
-      if (!normalizedItem || normalizedItem === normalizedQuestion) {
-        return false;
-      }
-
-      if (seen.has(normalizedItem)) {
-        return false;
-      }
-
-      seen.add(normalizedItem);
-      return true;
-    })
-    .slice(0, 4);
+  return uniqueSuggestions(
+    mergedSuggestions,
+    question,
+    getSuggestionLimit(response),
+  );
 }
 
 function renderFollowups(suggestions) {
@@ -320,8 +353,9 @@ function renderFollowups(suggestions) {
     .map(
       (item) => `
         <button
+          type="button"
           class="followup-suggest-btn"
-          onclick='sendQuick(${JSON.stringify(item)})'
+          data-suggestion="${escapeHtml(item)}"
         >
           ${escapeHtml(item)}
         </button>
@@ -478,11 +512,14 @@ async function fetchChatResponse(message) {
     body: JSON.stringify({ message }),
   });
 
+  const data = await response.json().catch(() => null);
+
   if (!response.ok) {
+    if (data) return data;
     throw new Error(`HTTP ${response.status}`);
   }
 
-  return response.json();
+  return data;
 }
 
 async function sendMessage() {
@@ -520,7 +557,18 @@ function handleInputKeydown(event) {
   }
 }
 
+function handleSuggestionClick(event) {
+  const button = event.target.closest("[data-suggestion]");
+  if (!button) return;
+
+  sendQuick(button.dataset.suggestion || "");
+}
+
 userInput.addEventListener("keydown", handleInputKeydown);
+sendBtn.addEventListener("click", sendMessage);
+chatBox.addEventListener("scroll", updateHeaderScrollState, { passive: true });
+chatBox.addEventListener("click", handleSuggestionClick);
+window.addEventListener("load", updateHeaderScrollState);
 
 window.sendMessage = sendMessage;
 window.sendQuick = sendQuick;

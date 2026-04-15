@@ -6,7 +6,17 @@
     <title>PPU CHATBOT SYSTEM</title>
     <link
       rel="icon"
-      href="{{ url_for('static', filename='image/t05.ico') }}"
+      type="image/png"
+      href="{{ url_for('favicon') }}?v=20260415"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('favicon') }}?v=20260415"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="{{ url_for('static', filename='image/t05.png') }}?v=20260415"
     />
 
     <link
@@ -17,46 +27,99 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
-    <!-- <link rel="icon" href="{{ url_for('static', filename='image/t05.png') }}" /> -->
   </head>
-  <body>
-    <div class="header-top">
-      <div class="logo-title">
+  <body data-authenticated="{{ 'true' if is_authenticated else 'false' }}">
+    <header class="header-top site-banner">
+      <div class="logo-title site-brand">
         <img
           src="{{ url_for('static', filename='image/t05.png') }}"
-          class="logo"
+          class="logo site-brand-logo"
+          alt="Logo Trường Đại học Cảnh sát Nhân dân"
         />
-        <div class="title">
+        <div class="title site-brand-text">
           TRƯỜNG ĐẠI HỌC<br />
           <span>CẢNH SÁT NHÂN DÂN</span>
         </div>
       </div>
-      <div class="dia_chi">
-        <i class="fa-solid fa-house dia_chi_icon"></i>Trụ sở chính: 36 Nguyễn
-        Hữu Thọ - Phường
-        <br />
-        Tân Hưng - TP. Hồ Chí Minh
+      <div class="dia_chi site-address">
+        <i class="fa-solid fa-house dia_chi_icon"></i>
+        <div class="site-address-text">
+          <div class="site-address-label">Trụ sở chính</div>
+          <div>36 Nguyễn Hữu Thọ - Phường Tân Hưng - TP. Hồ Chí Minh</div>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <!-- MENU -->
-    <div class="chat-header">
-      <!-- LEFT -->
-      <div class="left">
+    <section class="chat-header chatbot-hero">
+      <div class="left chatbot-hero-brand">
         <img
           src="{{ url_for('static', filename='image/t05.png') }}"
-          class="logo"
+          class="logo chatbot-hero-logo"
+          alt="Logo PPU Chatbot"
         />
 
-        <div class="title">
-          <div class="main">DEMO PPU CHATBOT</div>
-          <div class="sub">Hỗ trợ học viên T05</div>
+        <div class="title chatbot-hero-copy">
+          <div class="main chatbot-hero-title">DEMO PPU CHATBOT</div>
+          <div class="sub chatbot-hero-subtitle">Hỗ trợ học viên T05</div>
         </div>
       </div>
 
-      <!-- RIGHT -->
-      <div class="right"></div>
-    </div>
+      <div class="right auth-panel chatbot-hero-auth">
+        {% set flashed_messages = get_flashed_messages(with_categories=true) %}
+
+        {% if flashed_messages %}
+          <div class="auth-flash-stack">
+            {% for category, message in flashed_messages %}
+              <div class="auth-flash auth-flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if is_authenticated %}
+        <div class="auth-user-box">
+          <div class="auth-user-text">
+            <div class="auth-user-label">Đã đăng nhập</div>
+            <div class="auth-user-name">{{ current_user }}</div>
+          </div>
+          <form method="post" action="{{ url_for('logout') }}">
+            <button type="submit" class="auth-btn auth-btn-logout">
+              Đăng xuất
+            </button>
+          </form>
+        </div>
+        {% else %}
+        <details
+          class="auth-login-disclosure"
+          {% if flashed_messages %}open{% endif %}
+        >
+          <summary class="auth-btn auth-btn-login">Đăng nhập</summary>
+          <form
+            class="auth-login-form"
+            method="post"
+            action="{{ url_for('login') }}"
+          >
+            <input
+              type="text"
+              name="username"
+              class="auth-input"
+              placeholder="Tài khoản"
+              autocomplete="username"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              class="auth-input"
+              placeholder="Mật khẩu"
+              autocomplete="current-password"
+              required
+            />
+            <button type="submit" class="auth-btn">Xác nhận</button>
+          </form>
+          </details>
+        {% endif %}
+      </div>
+    </section>
 
     <div class="chat-wrapper">
       <div id="chat-box">
@@ -69,8 +132,11 @@
             />
           </div>
           <div class="message">
-            Xin chào! Tôi là trợ lý AI hỗ trợ học viên trường ĐHCS. Bạn cần hỏi
-            gì?
+            {% if is_authenticated %}
+              Xin chào! Tôi là trợ lý AI hỗ trợ học viên trường ĐHCS. Bạn có thể hỏi về tuyển sinh, lịch học, thư viện, tài liệu và các nội dung nội bộ khác.
+            {% else %}
+              Xin chào! Tôi là trợ lý AI hỗ trợ học viên trường ĐHCS. Khi chưa đăng nhập, bạn chỉ có thể tra cứu thông tin tuyển sinh.
+            {% endif %}
             <hr />
           </div>
         </div>
@@ -78,24 +144,15 @@
         <!-- SUGGEST -->
         <div class="suggest-box">
           <div class="suggest-title">🤔 Câu hỏi gợi ý cho bạn:</div>
-
-          <button class="suggest-btn" onclick="sendQuick('Lịch học lớp DTHS3')">
-            💡 Lịch học lớp DTHS3
+          {% for suggestion in initial_suggestions %}
+          <button
+            type="button"
+            class="suggest-btn"
+            data-suggestion="{{ suggestion }}"
+          >
+            💡 {{ suggestion }}
           </button>
-
-          <button class="suggest-btn" onclick="sendQuick('Giáo trình Luật Hình sự')">
-            💡 Tra cứu Giáo trình Luật Hình sự
-          </button>
-
-          <button class="suggest-btn" onclick="sendQuick('Đơn xin phép')">
-            💡 Mẫu đơn xin phép
-          </button>
-          <button class="suggest-btn" onclick="sendQuick('Giờ mở cửa thư viện')">
-            💡 Giờ mở cửa thư viện
-          </button>
-          <button class="suggest-btn" onclick="sendQuick('Chỉ tiêu tuyển sinh')">
-            💡 Chỉ tiêu tuyển sinh
-          </button>
+          {% endfor %}
         </div>
       </div>
 
@@ -106,10 +163,10 @@
         <input
           id="user-input"
           type="text"
-          placeholder="Nhập câu hỏi hoặc dán ảnh (Ctrl+V)..."
+          placeholder="{{ input_placeholder }}"
         />
 
-        <button id="send-btn" onclick="sendMessage()">➤</button>
+        <button id="send-btn" type="button">➤</button>
       </div>
 
       <div class="note">

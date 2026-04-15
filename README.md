@@ -1,96 +1,89 @@
-# Chatbot Hỗ trợ Sinh viên ĐHCS
-Chạy hoàn toàn offline – không cần internet sau khi cài đặt.
+# Chatbot Hỗ trợ Học viên ĐHCS
 
----
+Chatbot web hỗ trợ học viên Trường Đại học Cảnh sát nhân dân.
 
-## Cấu trúc thư mục
+Ứng dụng dùng:
+- Flask cho backend
+- HTML/CSS/JavaScript cho giao diện
+- dữ liệu JSON nội bộ cho phần lớn câu trả lời
+- Ollama để hỗ trợ fallback khi không có dữ liệu structured phù hợp
 
-```
-dhcs_chatbot/
-├── app.py                  ← Server Flask chính
-├── app_mysql.py            ← Biến thể dùng MySQL
-├── db/
-│   ├── __init__.py
-│   └── mysql.py            ← Kết nối MySQL dùng lại cho service
-├── sandbox/
-│   ├── __init__.py
-│   ├── README.md
-│   ├── test.py             ← File backend thử nghiệm / nháp
-│   └── test.js             ← File frontend thử nghiệm / nháp
-├── services/
-│   └── lich_hoc_service.py
-├── templates/
-│   └── index.html          ← Giao diện web
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   ├── image/
-│   └── js/
-│       └── script.js       ← Frontend chính
-└── data/
-    ├── lich_hoc.json       ← Lịch học, lịch thi
-    ├── ho_so.json          ← Công văn, thông tư, biểu mẫu
-    ├── tai_lieu.json       ← Tài liệu nghiệp vụ
-    ├── thu_vien.json       ← Dữ liệu thư viện
-    └── tuyen_sinh.json     ← Thông tin tuyển sinh CAND
-```
+Tài liệu chi tiết cho dev xem tại:
+- [README.dev.md](./README.dev.md)
 
----
+## Chatbot trả lời được gì
 
-## Bước 1 – Cài Ollama
+Hiện hệ thống hỗ trợ các nhóm chính:
+- lịch học, lịch thi
+- thư viện
+- công văn, thông tư, nghị định, biểu mẫu
+- hỗ trợ học tập
+- tuyển sinh
 
-Tải tại: https://ollama.com/download
+## Cách chạy nhanh
 
-Sau khi cài, mở terminal và kéo model (chỉ cần làm 1 lần):
+### 1. Cài Python packages
+
 ```bash
-ollama pull llama3
+pip install flask requests
 ```
-> Hoặc dùng model nhỏ hơn nếu máy yếu:
-> `ollama pull qwen2:1.5b`
-> (nhớ đổi MODEL_NAME trong app.py thành "qwen2:1.5b")
 
-Khởi động Ollama (luôn phải chạy trước khi dùng chatbot):
+### 2. Cài và chạy Ollama
+
+Tải tại:
+
+```text
+https://ollama.com/download
+```
+
+Kéo model:
+
+```bash
+ollama pull qwen2:1.5b
+```
+
+Khởi động Ollama:
+
 ```bash
 ollama serve
 ```
 
----
+### 3. Chạy chatbot
 
-## Bước 2 – Cài Python packages
-
-```bash
-cd dhcs_chatbot
-pip install -r requirements.txt
-```
-
----
-
-## Bước 3 – Chạy chatbot
+Trong thư mục project:
 
 ```bash
 python app.py
 ```
 
-Mở trình duyệt: http://localhost:5000
+Mở trình duyệt:
 
----
+```text
+http://localhost:5000
+```
 
 ## Cập nhật dữ liệu
 
-Chỉnh sửa các file JSON trong thư mục `data/` để cập nhật:
-- Lịch học mới → `data/lich_hoc.json`
-- Công văn mới → `data/cong_van.json`
-- Thêm xe → `data/the_xe.json`
-- Cập nhật tuyển sinh → `data/tuyen_sinh.json`
+Nếu chỉ muốn cập nhật nội dung trả lời, chỉnh các file trong thư mục `data/`:
+- `data/lich_hoc.json`
+- `data/ho_so.json`
+- `data/tai_lieu.json`
+- `data/thu_vien.json`
+- `data/tuyen_sinh.json`
 
-Không cần restart server, dữ liệu được đọc mỗi lần có câu hỏi.
+Thông thường không cần sửa code nếu chỉ thay đổi nội dung và vẫn giữ đúng cấu trúc dữ liệu.
 
----
+## Chạy test
 
-## Mô hình được khuyến nghị
+```bash
+python3 -m unittest discover -s tests -p "test_*.py"
+```
 
-| Máy tính          | Model gợi ý           | RAM cần  |
-|-------------------|-----------------------|----------|
-| Mạnh (≥16GB RAM)  | llama3                | ~8GB     |
-| Trung bình (8GB)  | qwen2:7b              | ~5GB     |
-| Yếu (4GB)         | qwen2:1.5b hoặc phi3  | ~2GB     |
+## Khi nào cần xem tài liệu dev
+
+Xem [README.dev.md](./README.dev.md) nếu bạn cần:
+- hiểu cấu trúc thư mục và vai trò từng file
+- biết luồng hoạt động backend/frontend
+- thêm intent mới cho chatbot
+- sửa service theo từng domain
+- chạy kiểm tra kỹ thuật hoặc refactor code

@@ -6,8 +6,13 @@ from .types import JsonDict, StructuredContext
 
 
 def load_data(filename: str) -> JsonDict:
-    path = DATA_DIR / filename
-    if not path.exists():
+    candidate_paths = [
+        DATA_DIR / "json" / filename,
+        DATA_DIR / filename,
+    ]
+
+    path = next((item for item in candidate_paths if item.exists()), None)
+    if path is None:
         return {}
 
     with path.open("r", encoding="utf-8") as file:
@@ -61,6 +66,38 @@ def build_table_context(
     }
 
 
+def build_pdf_document_context(
+    title: str,
+    *,
+    document_type: str,
+    name: str,
+    so_hieu: str = "",
+    ngay_ban_hanh: str = "",
+    ngay_hieu_luc: str = "",
+    trang_thai: str = "",
+    tom_tat: str = "",
+    noi_dung: str = "",
+    co_quan_ban_hanh: str = "",
+    file_url: str = "",
+    file_name: str = "",
+) -> StructuredContext:
+    return {
+        "type": "pdf_document",
+        "title": title,
+        "document_type": document_type,
+        "name": name,
+        "so_hieu": so_hieu,
+        "ngay_ban_hanh": ngay_ban_hanh,
+        "ngay_hieu_luc": ngay_hieu_luc,
+        "trang_thai": trang_thai,
+        "tom_tat": tom_tat,
+        "noi_dung": noi_dung,
+        "co_quan_ban_hanh": co_quan_ban_hanh,
+        "file_url": file_url,
+        "file_name": file_name,
+    }
+
+
 def format_context_data(data: StructuredContext) -> str:
     context_type = data.get("type")
     title = data.get("title", "")
@@ -82,6 +119,17 @@ def format_context_data(data: StructuredContext) -> str:
             lines.append(" | ".join(columns))
         for row in data.get("rows", []):
             lines.append(" | ".join(str(value) for value in row.values()))
+        return "\n".join(lines)
+
+    if context_type == "pdf_document":
+        lines = [f"=== {title} ==="] if title else []
+        lines.append(f"Tên văn bản: {data.get('name', '')}")
+        if data.get("so_hieu"):
+            lines.append(f"Số hiệu: {data.get('so_hieu', '')}")
+        if data.get("ngay_hieu_luc"):
+            lines.append(f"Ngày hiệu lực: {data.get('ngay_hieu_luc', '')}")
+        if data.get("tom_tat"):
+            lines.append(f"Tóm tắt: {data.get('tom_tat', '')}")
         return "\n".join(lines)
 
     return ""

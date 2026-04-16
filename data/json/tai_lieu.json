@@ -1,0 +1,73 @@
+{
+  "mo_ta": "Hỗ trợ học viên trong quá trình học tập các môn nghiệp vụ và pháp luật",
+
+  "chuc_nang": [
+    {
+      "ten": "Giải đáp thắc mắc",
+      "noi_dung": [
+        "Giải đáp nhanh các câu hỏi liên quan đến bài học",
+        "Hỗ trợ hiểu rõ nội dung môn học như hình sự, hành chính, tố tụng",
+        "Trả lời các vấn đề thực tế trong quá trình học"
+      ]
+    },
+    {
+      "ten": "Giải thích bài giảng",
+      "noi_dung": [
+        "Diễn giải lại nội dung bài giảng theo cách dễ hiểu",
+        "Làm rõ các khái niệm pháp luật phức tạp",
+        "Liên hệ ví dụ thực tế giúp học viên dễ tiếp thu"
+      ]
+    },
+    {
+      "ten": "Tóm tắt giáo trình",
+      "noi_dung": [
+        "Tóm tắt nội dung chính của bài học",
+        "Hệ thống lại kiến thức theo sơ đồ logic",
+        "Giúp học viên ôn tập nhanh trước khi thi"
+      ]
+    },
+    {
+      "ten": "Tạo câu hỏi ôn tập",
+      "noi_dung": [
+        "Tạo câu hỏi trắc nghiệm",
+        "Tạo câu hỏi tự luận",
+        "Đưa ra tình huống thực tế để luyện tập"
+      ]
+    },
+    {
+      "ten": "Gợi ý phương pháp học",
+      "noi_dung": [
+        "Hướng dẫn cách học hiệu quả từng môn",
+        "Gợi ý cách ghi nhớ luật và điều khoản",
+        "Phương pháp ôn thi nhanh và hiệu quả"
+      ]
+    },
+    {
+      "ten": "Hỗ trợ tự học",
+      "noi_dung": [
+        "Giúp học viên chủ động tiếp cận kiến thức",
+        "Định hướng nội dung cần học",
+        "Tăng khả năng tự nghiên cứu và tư duy"
+      ]
+    }
+  ],
+
+  "linh_vuc": [
+    "Luật hình sự",
+    "Luật hành chính",
+    "Luật tố tụng hình sự",
+    "Nghiệp vụ công an",
+    "Pháp luật đại cương"
+  ],
+  "vi_du_cau_hoi": [
+    "Phân tích cấu thành tội phạm?",
+    "So sánh xử phạt hành chính và hình sự?",
+    "Nguyên tắc tố tụng hình sự là gì?"
+  ],
+  "dinh_dang_tra_loi": [
+    "Trả lời ngắn gọn",
+    "Giải thích chi tiết",
+    "Có ví dụ minh họa",
+    "Có câu hỏi ôn tập kèm theo"
+  ]
+}

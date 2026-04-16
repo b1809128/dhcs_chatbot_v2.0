@@ -5,7 +5,7 @@ Chatbot web hỗ trợ học viên Trường Đại học Cảnh sát nhân dân
 Hệ thống ưu tiên trả lời trực tiếp từ dữ liệu nội bộ JSON theo từng domain như:
 - lịch học, lịch thi
 - thư viện
-- công văn, thông tư, nghị định, biểu mẫu
+- công văn, thông tư, nghị định, luật, biểu mẫu
 - tài liệu học tập
 - tuyển sinh
 
@@ -50,23 +50,52 @@ dhcs_chatbot/
 Chứa dữ liệu nội bộ để chatbot trả lời trực tiếp.
 
 Các file chính:
-- `lich_hoc.json`: lịch học và lịch thi
-- `ho_so.json`: công văn, thông tư, nghị định, biểu mẫu, tổ chức
-- `tai_lieu.json`: nhóm hỗ trợ học tập, giải thích, tóm tắt, ôn tập
-- `thu_vien.json`: dữ liệu thư viện, đầu sách, quy định mượn trả, giờ mở cửa
-- `tuyen_sinh.json`: chỉ tiêu, phương thức, hồ sơ, bài thi, thông tin trường
-- `ra_vao.json`, `the_xe.json`: hiện có thể dùng để mở rộng tiếp trong tương lai
+- `json/lich_hoc.json`: lịch học và lịch thi
+- `json/ho_so.json`: công văn, thông tư, nghị định, luật, biểu mẫu, tổ chức
+- `json/tai_lieu.json`: nhóm hỗ trợ học tập, giải thích, tóm tắt, ôn tập
+- `json/thu_vien.json`: dữ liệu thư viện, đầu sách, quy định mượn trả, giờ mở cửa
+- `json/tuyen_sinh.json`: chỉ tiêu, phương thức, hồ sơ, bài thi, thông tin trường
+- `json/ra_vao.json`, `json/the_xe.json`: hiện có thể dùng để mở rộng tiếp trong tương lai
+- `pdf/`: thư mục chứa file PDF nội bộ được frontend mở qua route `/documents/<path:filename>`
 
 Nguyên tắc:
-- nếu chỉ thay đổi nội dung nghiệp vụ, ưu tiên sửa ở `data/*.json`
+- nếu chỉ thay đổi nội dung nghiệp vụ, ưu tiên sửa ở `data/json/*.json`
 - nếu thay đổi cách hiểu câu hỏi hoặc cách hiển thị câu trả lời, sửa ở `services/chatbot/`
+
+### Cấu trúc dữ liệu PDF pháp lý trong `json/ho_so.json`
+
+Các văn bản như thông tư, luật có thể khai báo thêm metadata PDF để chatbot trả về thẻ tài liệu thay vì chỉ bảng text.
+
+Ví dụ một item:
+
+```json
+{
+  "ten": "Luật An ninh mạng",
+  "so_hieu": "24/2018/QH14",
+  "ngay_ban_hanh": "12/06/2018",
+  "ngay_hieu_luc": "01/01/2019",
+  "noi_dung": "Quy định về hoạt động bảo vệ an ninh quốc gia trên không gian mạng.",
+  "trang_thai": "Còn hiệu lực",
+  "file_pdf": "law/luat_an_ninh_mang.pdf",
+  "tu_khoa": ["luật an ninh mạng", "luat_an_ninh_mang", "24/2018/qh14"],
+  "tom_tat": "Luật quy định các biện pháp bảo vệ an ninh mạng.",
+  "co_quan_ban_hanh": "Quốc hội"
+}
+```
+
+Ý nghĩa các field:
+- `file_pdf`: đường dẫn tương đối tính từ `data/pdf/`
+- `tu_khoa`: các biến thể để match câu hỏi người dùng
+- `tom_tat`: nội dung hiển thị nhanh trên card/sidebar
+- `ngay_hieu_luc`: dùng cho phần thông tin tóm tắt
+- `co_quan_ban_hanh`: hiển thị trong sidebar tài liệu
 
 ### `templates/`
 
 Chứa HTML giao diện Flask render ra trình duyệt.
 
 File chính:
-- `templates/index.html`: khung giao diện chat, câu hỏi gợi ý ban đầu, input gửi câu hỏi
+- `templates/index.html`: khung giao diện chat, câu hỏi gợi ý ban đầu, input gửi câu hỏi, sidebar tóm tắt tài liệu và modal xem PDF
 
 ### `static/`
 
@@ -74,7 +103,7 @@ Chứa tài nguyên tĩnh cho frontend.
 
 Các file chính:
 - `static/css/style.css`: giao diện chat
-- `static/js/script.js`: gửi câu hỏi, nhận phản hồi, render bảng/list/text, hiển thị gợi ý tiếp theo
+- `static/js/script.js`: gửi câu hỏi, nhận phản hồi, render bảng/list/text/pdf_document, hiển thị gợi ý tiếp theo, mở sidebar và modal PDF
 - `static/image/*`: logo, avatar chatbot, favicon
 
 ### `services/`
@@ -104,7 +133,7 @@ Các file quan trọng:
   - helper dùng lại ở nhiều nơi
   - đọc file JSON
   - kiểm tra keyword
-  - dựng `text`, `list`, `table`
+  - dựng `text`, `list`, `table`, `pdf_document`
   - format context cho LLM
   - tìm sách theo nhiều field
 
@@ -122,7 +151,8 @@ Các file quan trọng:
   - xử lý lịch học, lịch thi
 
 - `document_context.py`
-  - xử lý công văn, thông tư, nghị định, đơn, tổ chức
+  - xử lý công văn, thông tư, nghị định, luật, đơn, tổ chức
+  - match tài liệu PDF pháp lý theo `so_hieu`, `file_pdf`, `tu_khoa`
 
 - `library_context.py`
   - xử lý tra cứu sách, giờ mở cửa, liên hệ thư viện, quy định mượn trả, tài liệu đọc tại chỗ
@@ -199,6 +229,7 @@ Payload dạng:
 Trong `app.py`:
 - đọc `message`
 - gọi `build_chat_response(question)`
+- phục vụ file PDF qua route `/documents/<path:filename>`
 
 ### 3. `chat_service.py` điều phối xử lý
 
@@ -219,7 +250,11 @@ Luồng cơ bản:
   - `table`
   - `list`
   - `text`
+  - `pdf_document`
 - hiển thị 4 câu hỏi gợi ý tiếp theo
+- nếu là `pdf_document` thì cho phép:
+  - mở sidebar tóm tắt
+  - mở modal xem PDF
 
 ## Dạng phản hồi của backend
 
@@ -241,6 +276,34 @@ Backend có thể trả về:
     "Lịch học môn Luật Hình sự",
     "Lịch thi",
     "Lịch học môn Tố tụng hình sự"
+  ]
+}
+```
+
+### Trường hợp 1b: structured PDF document
+
+```json
+{
+  "reply": "LUẬT",
+  "data": {
+    "type": "pdf_document",
+    "title": "LUẬT",
+    "document_type": "Luật",
+    "name": "Luật An ninh mạng",
+    "so_hieu": "24/2018/QH14",
+    "ngay_ban_hanh": "12/06/2018",
+    "ngay_hieu_luc": "01/01/2019",
+    "trang_thai": "Còn hiệu lực",
+    "tom_tat": "Luật quy định các biện pháp bảo vệ an ninh mạng.",
+    "co_quan_ban_hanh": "Quốc hội",
+    "file_url": "/documents/law/luat_an_ninh_mang.pdf",
+    "file_name": "luat_an_ninh_mang.pdf"
+  },
+  "suggestions": [
+    "Thông tư 62_2023",
+    "Nghị định",
+    "Công văn",
+    "Đơn xin phép"
   ]
 }
 ```
@@ -323,12 +386,12 @@ python3 -m py_compile app.py services/chatbot/*.py tests/*.py
 
 ### Khi chỉ thay đổi nội dung
 
-Sửa trực tiếp các file JSON trong `data/`.
+Sửa trực tiếp các file JSON trong `data/json/`.
 
 Ví dụ:
-- thêm đầu sách mới: sửa `data/thu_vien.json`
-- đổi lịch học: sửa `data/lich_hoc.json`
-- cập nhật tuyển sinh: sửa `data/tuyen_sinh.json`
+- thêm đầu sách mới: sửa `data/json/thu_vien.json`
+- đổi lịch học: sửa `data/json/lich_hoc.json`
+- cập nhật tuyển sinh: sửa `data/json/tuyen_sinh.json`
 
 Thông thường không cần đổi frontend nếu cấu trúc field cũ vẫn được giữ.
 
@@ -384,7 +447,7 @@ Nếu bạn mới vào dự án, hãy đọc theo thứ tự này:
 3. `services/chatbot/context_builders.py`
 4. domain bạn cần sửa, ví dụ `library_context.py`
 5. `static/js/script.js`
-6. file JSON tương ứng trong `data/`
+6. file JSON tương ứng trong `data/json/`
 7. test domain tương ứng trong `tests/`
 
 Chỉ cần nắm chuỗi đó là đã có thể bắt đầu sửa tính năng khá an toàn.

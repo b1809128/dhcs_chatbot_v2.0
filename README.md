@@ -16,9 +16,19 @@ Tài liệu chi tiết cho dev xem tại:
 Hiện hệ thống hỗ trợ các nhóm chính:
 - lịch học, lịch thi
 - thư viện
-- công văn, thông tư, nghị định, biểu mẫu
+- công văn, thông tư, nghị định, luật, biểu mẫu
 - hỗ trợ học tập
 - tuyển sinh
+
+Ngoài câu trả lời dạng bảng, hệ thống hiện hỗ trợ tài liệu PDF pháp lý:
+- khi hỏi đúng văn bản như `thông tư 62_2023` hoặc `luật an ninh mạng`
+- chatbot có thể trả về thẻ tài liệu với:
+  - tên văn bản
+  - số hiệu
+  - ngày hiệu lực
+  - tóm tắt nội dung
+- bấm `Xem tóm tắt` để mở sidebar
+- bấm `Xem file PDF` để mở modal xem trực tiếp file PDF trong giao diện
 
 ## Cách chạy nhanh
 
@@ -64,12 +74,17 @@ http://localhost:5000
 
 ## Cập nhật dữ liệu
 
-Nếu chỉ muốn cập nhật nội dung trả lời, chỉnh các file trong thư mục `data/`:
-- `data/lich_hoc.json`
-- `data/ho_so.json`
-- `data/tai_lieu.json`
-- `data/thu_vien.json`
-- `data/tuyen_sinh.json`
+Nếu chỉ muốn cập nhật nội dung trả lời, chỉnh các file trong thư mục `data/json/`:
+- `data/json/lich_hoc.json`
+- `data/json/ho_so.json`
+- `data/json/tai_lieu.json`
+- `data/json/thu_vien.json`
+- `data/json/tuyen_sinh.json`
+
+Nếu muốn thêm tài liệu PDF pháp lý:
+- đặt file vào `data/pdf/...`
+- khai báo metadata tương ứng trong `data/json/ho_so.json`
+  - ví dụ: `file_pdf`, `so_hieu`, `ngay_hieu_luc`, `tom_tat`, `tu_khoa`
 
 Thông thường không cần sửa code nếu chỉ thay đổi nội dung và vẫn giữ đúng cấu trúc dữ liệu.
 

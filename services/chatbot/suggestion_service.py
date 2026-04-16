@@ -31,13 +31,20 @@ def get_contextual_suggestions(query: str, data: Optional[StructuredContext]) ->
             "Lịch thi Kỹ thuật hình sự",
         ]
 
-    if title in {"CÔNG VĂN", "THÔNG TƯ", "NGHỊ ĐỊNH", "BIỂU MẪU / ĐƠN", "TỔ CHỨC"}:
+    if title in {"CÔNG VĂN", "THÔNG TƯ", "NGHỊ ĐỊNH", "LUẬT", "BIỂU MẪU / ĐƠN", "TỔ CHỨC"}:
         if "đơn" in normalized_query:
             return [
                 "Đơn nghỉ tranh thủ",
                 "Công văn",
                 "Thông tư",
                 "Đoàn thanh niên",
+            ]
+        if contains_any(normalized_query, ["luật an ninh mạng", "luat an ninh mang", "luat_an_ninh_mang"]):
+            return [
+                "Thông tư 62_2023",
+                "Nghị định",
+                "Công văn",
+                "Đơn xin phép",
             ]
         return [
             "Công văn",

@@ -19,6 +19,29 @@ class DocumentContextTests(unittest.TestCase):
         self.assertEqual(result["title"], "CÔNG VĂN")
         self.assertTrue(len(result["rows"]) >= 1)
 
+    def test_returns_pdf_document_for_specific_thong_tu(self):
+        result = build_document_context("thông tư 62_2023")
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["type"], "pdf_document")
+        self.assertEqual(result["so_hieu"], "62/2023/TT-BCA")
+        self.assertEqual(
+            result["file_url"],
+            "/documents/thong_tu/thong_tu_62_2023.pdf",
+        )
+
+    def test_returns_pdf_document_for_luat_an_ninh_mang(self):
+        result = build_document_context("luật an ninh mạng")
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["type"], "pdf_document")
+        self.assertEqual(result["title"], "LUẬT")
+        self.assertEqual(result["so_hieu"], "24/2018/QH14")
+        self.assertEqual(
+            result["file_url"],
+            "/documents/law/luat_an_ninh_mang.pdf",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

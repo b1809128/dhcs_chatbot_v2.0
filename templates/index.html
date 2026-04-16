@@ -23,6 +23,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@500;600;700;800&display=swap"
+    />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
@@ -114,7 +120,9 @@
               autocomplete="current-password"
               required
             />
-            <button type="submit" class="auth-btn">Xác nhận</button>
+            <button type="submit" class="auth-btn auth-btn-submit">
+              Xác nhận
+            </button>
           </form>
           </details>
         {% endif %}
@@ -173,9 +181,72 @@
         📋 Mọi thông tin pháp lý chính thức xin tham khảo văn bản trên
         <a
           href="https://www.dhcsnd.edu.vn"
-          style="color: #1c9608; font-weight: bold"
+          class="note-link"
           >Website/trang thông báo của trường ĐHCS</a
         >
+      </div>
+    </div>
+
+    <div class="doc-sidebar-backdrop" id="doc-sidebar-backdrop" hidden></div>
+    <aside class="doc-sidebar" id="doc-sidebar" aria-hidden="true">
+      <div class="doc-sidebar-header">
+        <div>
+          <div class="doc-sidebar-eyebrow">Tóm tắt tài liệu</div>
+          <h3 id="doc-sidebar-title">Thông tin văn bản</h3>
+        </div>
+        <button
+          type="button"
+          class="doc-close-btn"
+          id="doc-sidebar-close"
+          aria-label="Đóng sidebar"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="doc-sidebar-body" id="doc-sidebar-body"></div>
+
+      <div class="doc-sidebar-actions">
+        <button type="button" class="doc-primary-btn" id="doc-open-modal-btn">
+          Xem file PDF
+        </button>
+        <a
+          href="#"
+          class="doc-secondary-btn"
+          id="doc-open-new-tab"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Mở tab mới
+        </a>
+      </div>
+    </aside>
+
+    <div class="pdf-modal" id="pdf-modal" aria-hidden="true" hidden>
+      <div class="pdf-modal-backdrop" id="pdf-modal-backdrop"></div>
+      <div class="pdf-modal-dialog" role="dialog" aria-modal="true">
+        <div class="pdf-modal-header">
+          <div class="pdf-modal-title-wrap">
+            <div class="pdf-modal-eyebrow">Xem tài liệu</div>
+            <h3 id="pdf-modal-title">Nội dung PDF</h3>
+          </div>
+          <button
+            type="button"
+            class="doc-close-btn"
+            id="pdf-modal-close"
+            aria-label="Đóng modal"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="pdf-modal-body">
+          <iframe
+            id="pdf-modal-frame"
+            class="pdf-modal-frame"
+            title="Xem tài liệu PDF"
+          ></iframe>
+        </div>
       </div>
     </div>
 

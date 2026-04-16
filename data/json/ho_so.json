@@ -1,0 +1,98 @@
+{
+  "cong_van": [
+    {
+      "ten": "Công văn triển khai công tác đoàn thanh niên",
+      "so_hieu": "CV-123/2026",
+      "ngay_ban_hanh": "01/03/2026",
+      "noi_dung": "Triển khai các hoạt động đoàn thanh niên trong toàn trường",
+      "doi_tuong": "Học viên",
+      "trang_thai": "Đang áp dụng"
+    }
+  ],
+
+  "thong_tu": [
+    {
+      "ten": "Thông tư 62/2023/TT-BCA quy định về tiêu chuẩn sức khỏe đặc thù và khám sức khỏe đối với lực lượng Công an nhân dân",
+      "so_hieu": "62/2023/TT-BCA",
+      "ngay_ban_hanh": "14/11/2023",
+      "ngay_hieu_luc": "01/01/2024",
+      "noi_dung": "Quy định tiêu chuẩn sức khỏe đặc thù, quy trình khám sức khỏe và phân loại sức khỏe trong Công an nhân dân.",
+      "trang_thai": "Còn hiệu lực",
+      "file_pdf": "thong_tu/thong_tu_62_2023.pdf",
+      "tu_khoa": [
+        "62_2023",
+        "62/2023",
+        "62-2023",
+        "thong tu 62",
+        "thông tư 62",
+        "tt-bca"
+      ],
+      "tom_tat": "Văn bản hướng dẫn tiêu chuẩn sức khỏe đặc thù, nội dung khám sức khỏe và cách phân loại sức khỏe áp dụng trong lực lượng Công an nhân dân.",
+      "co_quan_ban_hanh": "Bộ Công an"
+    },
+    {
+      "ten": "Thông tư quy định quản lý học viên",
+      "so_hieu": "TT-45/2025",
+      "ngay_ban_hanh": "10/12/2025",
+      "ngay_hieu_luc": "",
+      "noi_dung": "Quy định về quản lý, rèn luyện học viên trong CAND",
+      "trang_thai": "Còn hiệu lực"
+    }
+  ],
+
+  "nghi_dinh": [
+    {
+      "ten": "Nghị định xử phạt hành chính",
+      "so_hieu": "ND-100/2024",
+      "ngay_ban_hanh": "20/08/2024",
+      "noi_dung": "Quy định xử phạt vi phạm hành chính trong lĩnh vực an ninh",
+      "trang_thai": "Còn hiệu lực"
+    }
+  ],
+
+  "luat": [
+    {
+      "ten": "Luật An ninh mạng",
+      "so_hieu": "24/2018/QH14",
+      "ngay_ban_hanh": "12/06/2018",
+      "ngay_hieu_luc": "01/01/2019",
+      "noi_dung": "Quy định về hoạt động bảo vệ an ninh quốc gia, bảo đảm trật tự an toàn xã hội trên không gian mạng; trách nhiệm của cơ quan, tổ chức, cá nhân có liên quan.",
+      "trang_thai": "Còn hiệu lực",
+      "file_pdf": "law/luat_an_ninh_mang.pdf",
+      "tu_khoa": [
+        "luat an ninh mang",
+        "luật an ninh mạng",
+        "an ninh mang",
+        "an ninh mạng",
+        "24/2018/qh14",
+        "luat_an_ninh_mang"
+      ],
+      "tom_tat": "Luật quy định các biện pháp bảo vệ an ninh mạng, phòng ngừa và xử lý hành vi sử dụng không gian mạng xâm phạm an ninh quốc gia, trật tự an toàn xã hội.",
+      "co_quan_ban_hanh": "Quốc hội"
+    }
+  ],
+
+  "bieu_mau": [
+    {
+      "ten": "Đơn xin phép",
+      "mo_ta": "Dùng khi xin nghỉ học, xin ra ngoài",
+      "noi_dung_mau": "Kính gửi: ... Tôi tên là ... xin phép được nghỉ ... vì lý do ..."
+    },
+    {
+      "ten": "Đơn nghỉ tranh thủ",
+      "mo_ta": "Dùng khi xin nghỉ tranh thủ cuối tuần",
+      "noi_dung_mau": "Kính gửi: ... Tôi xin nghỉ tranh thủ từ ngày ... đến ngày ..."
+    }
+  ],
+
+  "to_chuc": [
+    {
+      "ten": "Đoàn thanh niên",
+      "noi_dung": "Tổ chức hoạt động phong trào cho học viên"
+    },
+    {
+      "ten": "Đảng viên",
+      "noi_dung": "Thông tin liên quan đến công tác Đảng trong nhà trường"
+    }
+  ]
+}

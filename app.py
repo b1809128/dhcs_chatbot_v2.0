@@ -11,6 +11,7 @@ from flask import (
     session,
     url_for,
 )
+from werkzeug.exceptions import NotFound
 
 from services.chatbot import build_chat_response
 from services.chatbot.access_control import (
@@ -25,6 +26,7 @@ app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY", "dhcs-chatbot-dev-secre
 app.config["CHATBOT_USERNAME"] = os.getenv("CHATBOT_USERNAME", "hocvien")
 app.config["CHATBOT_PASSWORD"] = os.getenv("CHATBOT_PASSWORD", "dhcs123")
 STATIC_IMAGE_DIR = os.path.join(app.root_path, "static", "image")
+DATA_PDF_DIR = os.path.join(app.root_path, "data", "pdf")
 
 
 def is_authenticated() -> bool:
@@ -39,6 +41,19 @@ def favicon():
         mimetype="image/png",
         max_age=0,
     )
+
+
+@app.route("/documents/<path:filename>")
+def serve_document(filename: str):
+    try:
+        return send_from_directory(
+            DATA_PDF_DIR,
+            filename,
+            mimetype="application/pdf",
+            max_age=0,
+        )
+    except NotFound:
+        return jsonify({"error": "Không tìm thấy tài liệu PDF."}), 404
 
 
 @app.route("/")

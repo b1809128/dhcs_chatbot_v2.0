@@ -53,6 +53,37 @@ class AppAuthorizationTests(unittest.TestCase):
         payload = response.get_json()
         self.assertEqual(payload["reply"], "LỊCH HỌC")
 
+    def test_authenticated_user_can_get_specific_pdf_document(self):
+        self.client.post(
+            "/login",
+            data={
+                "username": app.config["CHATBOT_USERNAME"],
+                "password": app.config["CHATBOT_PASSWORD"],
+            },
+        )
+
+        response = self.client.post("/chat", json={"message": "thông tư 62_2023"})
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertEqual(payload["data"]["type"], "pdf_document")
+        self.assertEqual(
+            payload["data"]["file_url"],
+            "/documents/thong_tu/thong_tu_62_2023.pdf",
+        )
+
+    def test_document_route_serves_pdf(self):
+        response = self.client.get("/documents/thong_tu/thong_tu_62_2023.pdf")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("application/pdf", response.content_type)
+
+    def test_law_document_route_serves_pdf(self):
+        response = self.client.get("/documents/law/luat_an_ninh_mang.pdf")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("application/pdf", response.content_type)
+
 
 if __name__ == "__main__":
     unittest.main()

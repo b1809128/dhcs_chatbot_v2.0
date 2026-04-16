@@ -1,8 +1,21 @@
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 const sendBtn = document.getElementById("send-btn");
+const docSidebar = document.getElementById("doc-sidebar");
+const docSidebarBackdrop = document.getElementById("doc-sidebar-backdrop");
+const docSidebarCloseBtn = document.getElementById("doc-sidebar-close");
+const docSidebarTitle = document.getElementById("doc-sidebar-title");
+const docSidebarBody = document.getElementById("doc-sidebar-body");
+const docOpenModalBtn = document.getElementById("doc-open-modal-btn");
+const docOpenNewTab = document.getElementById("doc-open-new-tab");
+const pdfModal = document.getElementById("pdf-modal");
+const pdfModalBackdrop = document.getElementById("pdf-modal-backdrop");
+const pdfModalCloseBtn = document.getElementById("pdf-modal-close");
+const pdfModalTitle = document.getElementById("pdf-modal-title");
+const pdfModalFrame = document.getElementById("pdf-modal-frame");
 
 const BOT_AVATAR_SRC = "/static/image/chatbotai.png";
+let activeDocumentData = null;
 const ADMISSION_TITLES = new Set([
   "TUYỂN SINH",
   "BÀI THI ĐÁNH GIÁ",
@@ -206,9 +219,26 @@ function scrollToBottom() {
 function scrollToElement(element) {
   if (!element) return;
 
-  element.scrollIntoView({
+  const chatBoxRect = chatBox.getBoundingClientRect();
+  const elementRect = element.getBoundingClientRect();
+  const targetTop =
+    chatBox.scrollTop +
+    (elementRect.top - chatBoxRect.top) -
+    16;
+
+  chatBox.scrollTo({
+    top: Math.max(targetTop, 0),
     behavior: "smooth",
-    block: "start",
+  });
+}
+
+function scrollToElementAfterRender(element) {
+  if (!element) return;
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      scrollToElement(element);
+    });
   });
 }
 
@@ -455,7 +485,64 @@ function renderTextBlock(data) {
   `;
 }
 
+function renderDocumentCard(data) {
+  if (!data || data.type !== "pdf_document") return "";
+
+  const summaryText = data.tom_tat || data.noi_dung || "Chưa có tóm tắt cho tài liệu này.";
+  const encodedDocument = escapeHtml(JSON.stringify(data));
+
+  return `
+    <div class="doc-card">
+      <div class="doc-card-head">
+        <span class="doc-card-type">
+          <i class="fa-solid fa-file-pdf"></i>
+          ${escapeHtml(data.document_type || "Tài liệu PDF")}
+        </span>
+        ${data.trang_thai ? `<span class="doc-card-status">${escapeHtml(data.trang_thai)}</span>` : ""}
+      </div>
+
+      <div class="doc-card-title">${escapeHtml(data.name || data.title || "Tài liệu pháp lý")}</div>
+
+      <div class="doc-card-meta">
+        <div class="doc-meta-item">
+          <div class="doc-meta-label">Số hiệu</div>
+          <div class="doc-meta-value">${escapeHtml(data.so_hieu || "Chưa cập nhật")}</div>
+        </div>
+        <div class="doc-meta-item">
+          <div class="doc-meta-label">Ngày hiệu lực</div>
+          <div class="doc-meta-value">${escapeHtml(data.ngay_hieu_luc || "Chưa cập nhật")}</div>
+        </div>
+      </div>
+
+      <div class="doc-card-summary">${escapeHtml(summaryText)}</div>
+
+      <div class="doc-card-actions">
+        <button
+          type="button"
+          class="doc-card-btn is-secondary"
+          data-doc-action="sidebar"
+          data-document="${encodedDocument}"
+        >
+          Xem tóm tắt
+        </button>
+        <button
+          type="button"
+          class="doc-card-btn is-primary"
+          data-doc-action="modal"
+          data-document="${encodedDocument}"
+        >
+          Xem file PDF
+        </button>
+      </div>
+    </div>
+  `;
+}
+
 function renderBotContent(response) {
+  if (response?.data?.type === "pdf_document") {
+    return renderDocumentCard(response.data);
+  }
+
   if (response?.data?.type === "table") {
     return renderTable(response.data);
   }
@@ -469,6 +556,94 @@ function renderBotContent(response) {
   }
 
   return nl2br(response?.reply || "Không có phản hồi.");
+}
+
+function parseDocumentPayload(rawValue) {
+  if (!rawValue) return null;
+
+  try {
+    return JSON.parse(rawValue);
+  } catch (error) {
+    console.error("Không thể đọc dữ liệu tài liệu.", error);
+    return null;
+  }
+}
+
+function buildSidebarSection(title, value) {
+  if (!value) return "";
+
+  return `
+    <section class="doc-sidebar-section">
+      <div class="doc-sidebar-section-title">${escapeHtml(title)}</div>
+      <div class="doc-sidebar-section-value">${nl2br(value)}</div>
+    </section>
+  `;
+}
+
+function updateOverlayState() {
+  const hasOverlay = docSidebar?.classList.contains("is-open") || !pdfModal?.hidden;
+  document.body.classList.toggle("doc-overlay-open", Boolean(hasOverlay));
+}
+
+function closeSidebar() {
+  if (!docSidebar || !docSidebarBackdrop) return;
+
+  docSidebar.classList.remove("is-open");
+  docSidebar.setAttribute("aria-hidden", "true");
+  docSidebarBackdrop.hidden = true;
+  updateOverlayState();
+}
+
+function openSidebar(data) {
+  if (!docSidebar || !docSidebarBackdrop || !docSidebarTitle || !docSidebarBody) return;
+
+  activeDocumentData = data;
+  docSidebarTitle.textContent = data.name || data.title || "Thông tin văn bản";
+  docSidebarBody.innerHTML = [
+    buildSidebarSection("Loại văn bản", data.document_type || ""),
+    buildSidebarSection("Số hiệu", data.so_hieu || ""),
+    buildSidebarSection("Ngày ban hành", data.ngay_ban_hanh || ""),
+    buildSidebarSection("Ngày có hiệu lực", data.ngay_hieu_luc || ""),
+    buildSidebarSection("Cơ quan ban hành", data.co_quan_ban_hanh || ""),
+    buildSidebarSection("Nội dung tóm tắt", data.tom_tat || data.noi_dung || ""),
+    buildSidebarSection("Tên file", data.file_name || ""),
+  ]
+    .filter(Boolean)
+    .join("");
+
+  docOpenModalBtn.disabled = !data.file_url;
+  if (data.file_url) {
+    docOpenNewTab.href = data.file_url;
+    docOpenNewTab.setAttribute("aria-disabled", "false");
+  } else {
+    docOpenNewTab.href = "#";
+    docOpenNewTab.setAttribute("aria-disabled", "true");
+  }
+
+  docSidebarBackdrop.hidden = false;
+  docSidebar.classList.add("is-open");
+  docSidebar.setAttribute("aria-hidden", "false");
+  updateOverlayState();
+}
+
+function closePdfModal() {
+  if (!pdfModal || !pdfModalFrame) return;
+
+  pdfModal.hidden = true;
+  pdfModal.setAttribute("aria-hidden", "true");
+  pdfModalFrame.removeAttribute("src");
+  updateOverlayState();
+}
+
+function openPdfModal(data) {
+  if (!pdfModal || !pdfModalFrame || !pdfModalTitle || !data?.file_url) return;
+
+  activeDocumentData = data;
+  pdfModalTitle.textContent = data.name || data.title || "Nội dung PDF";
+  pdfModal.hidden = false;
+  pdfModal.setAttribute("aria-hidden", "false");
+  pdfModalFrame.src = data.file_url;
+  updateOverlayState();
 }
 
 function addBotMessage(response, originalQuestion = "") {
@@ -490,17 +665,19 @@ function addBotMessage(response, originalQuestion = "") {
 
   const newTableTitle = messageRow?.querySelector(".reply-table-title");
   if (newTableTitle) {
-    scrollToElement(newTableTitle);
+    scrollToElementAfterRender(newTableTitle);
     return;
   }
 
   const newTable = messageRow?.querySelector(".reply-table-wrap");
   if (newTable) {
-    scrollToElement(newTable);
+    scrollToElementAfterRender(newTable);
     return;
   }
 
-  scrollToBottom();
+  requestAnimationFrame(() => {
+    scrollToBottom();
+  });
 }
 
 async function fetchChatResponse(message) {
@@ -564,10 +741,51 @@ function handleSuggestionClick(event) {
   sendQuick(button.dataset.suggestion || "");
 }
 
+function handleDocumentAction(event) {
+  const button = event.target.closest("[data-doc-action]");
+  if (!button) return;
+
+  const data = parseDocumentPayload(button.dataset.document || "");
+  if (!data) return;
+
+  if (button.dataset.docAction === "sidebar") {
+    openSidebar(data);
+    return;
+  }
+
+  if (button.dataset.docAction === "modal") {
+    openPdfModal(data);
+  }
+}
+
+function handleEscape(event) {
+  if (event.key !== "Escape") return;
+
+  if (pdfModal && !pdfModal.hidden) {
+    closePdfModal();
+    return;
+  }
+
+  if (docSidebar?.classList.contains("is-open")) {
+    closeSidebar();
+  }
+}
+
 userInput.addEventListener("keydown", handleInputKeydown);
 sendBtn.addEventListener("click", sendMessage);
 chatBox.addEventListener("scroll", updateHeaderScrollState, { passive: true });
 chatBox.addEventListener("click", handleSuggestionClick);
+chatBox.addEventListener("click", handleDocumentAction);
+docSidebarCloseBtn?.addEventListener("click", closeSidebar);
+docSidebarBackdrop?.addEventListener("click", closeSidebar);
+docOpenModalBtn?.addEventListener("click", () => {
+  if (activeDocumentData) {
+    openPdfModal(activeDocumentData);
+  }
+});
+pdfModalCloseBtn?.addEventListener("click", closePdfModal);
+pdfModalBackdrop?.addEventListener("click", closePdfModal);
+document.addEventListener("keydown", handleEscape);
 window.addEventListener("load", updateHeaderScrollState);
 
 window.sendMessage = sendMessage;

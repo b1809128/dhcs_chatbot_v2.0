@@ -30,6 +30,18 @@ Ngoài câu trả lời dạng bảng, hệ thống hiện hỗ trợ tài liệ
 - bấm `Xem tóm tắt` để mở sidebar
 - bấm `Xem file PDF` để mở modal xem trực tiếp file PDF trong giao diện
 
+Luồng hiện tại của chatbot:
+1. frontend gửi câu hỏi đến `POST /chat`
+2. backend ưu tiên tìm `structured response` theo từng domain
+3. nếu match được `table`, `list` hoặc `pdf_document` thì trả thẳng cho giao diện
+4. nếu không match trực tiếp, hệ thống dựng context từ RAG + dữ liệu nội bộ rồi mới gọi Ollama
+5. frontend hiển thị trạng thái `Đang tìm kiếm`, sau đó render câu trả lời và cuộn mượt đến phần nội dung mới
+
+Một số cập nhật UI gần đây:
+- bảng `THÔNG TƯ` có nút `Xem tóm tắt` và `Mở PDF` ngay trên từng dòng
+- câu hỏi chung về `luật` hiện ưu tiên trả đúng tài liệu pháp lý thay vì rơi sang dữ liệu thư viện
+- khi phản hồi quá nhanh, giao diện vẫn giữ loading tối thiểu để tránh nháy
+
 ## Cách chạy nhanh
 
 ### 1. Cài Python packages
@@ -98,7 +110,7 @@ python3 -m unittest discover -s tests -p "test_*.py"
 
 Xem [README.dev.md](./README.dev.md) nếu bạn cần:
 - hiểu cấu trúc thư mục và vai trò từng file
-- biết luồng hoạt động backend/frontend
+- biết luồng hoạt động backend/frontend sau các cập nhật mới
 - thêm intent mới cho chatbot
 - sửa service theo từng domain
 - chạy kiểm tra kỹ thuật hoặc refactor code

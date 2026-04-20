@@ -15,7 +15,10 @@ const pdfModalTitle = document.getElementById("pdf-modal-title");
 const pdfModalFrame = document.getElementById("pdf-modal-frame");
 
 const BOT_AVATAR_SRC = "/static/image/chatbotai.png";
+const MIN_LOADING_TIME = 1800;
+const SMOOTH_SCROLL_DURATION = 360;
 let activeDocumentData = null;
+let activeScrollAnimationFrame = null;
 const ADMISSION_TITLES = new Set([
   "TUYỂN SINH",
   "BÀI THI ĐÁNH GIÁ",
@@ -212,34 +215,100 @@ function nl2br(text) {
   return escapeHtml(text).replace(/\n/g, "<br>");
 }
 
+function easeOutCubic(progress) {
+  return 1 - Math.pow(1 - progress, 3);
+}
+
+function cancelActiveScrollAnimation() {
+  if (!activeScrollAnimationFrame) return;
+
+  cancelAnimationFrame(activeScrollAnimationFrame);
+  activeScrollAnimationFrame = null;
+}
+
+function smoothScrollTo(targetTop, duration = SMOOTH_SCROLL_DURATION) {
+  if (!chatBox) return;
+
+  cancelActiveScrollAnimation();
+
+  const startTop = chatBox.scrollTop;
+  const nextTop = Math.max(targetTop, 0);
+  const distance = nextTop - startTop;
+
+  if (Math.abs(distance) < 2) {
+    chatBox.scrollTop = nextTop;
+    return;
+  }
+
+  const startTime = performance.now();
+
+  const tick = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+
+    chatBox.scrollTop = startTop + distance * eased;
+
+    if (progress < 1) {
+      activeScrollAnimationFrame = requestAnimationFrame(tick);
+      return;
+    }
+
+    chatBox.scrollTop = nextTop;
+    activeScrollAnimationFrame = null;
+  };
+
+  activeScrollAnimationFrame = requestAnimationFrame(tick);
+}
+
 function scrollToBottom() {
-  chatBox.scrollTop = chatBox.scrollHeight;
+  smoothScrollTo(chatBox.scrollHeight);
 }
 
 function scrollToElement(element) {
   if (!element) return;
 
-  const chatBoxRect = chatBox.getBoundingClientRect();
-  const elementRect = element.getBoundingClientRect();
-  const targetTop =
-    chatBox.scrollTop +
-    (elementRect.top - chatBoxRect.top) -
-    16;
+  smoothScrollTo(element.offsetTop - 16);
+}
 
-  chatBox.scrollTo({
-    top: Math.max(targetTop, 0),
-    behavior: "smooth",
+function waitForStableLayout(element) {
+  return new Promise((resolve) => {
+    let previousTop = -1;
+    let stableFrames = 0;
+
+    const settle = () => {
+      if (!element?.isConnected) {
+        resolve();
+        return;
+      }
+
+      const currentTop = element.offsetTop;
+
+      if (Math.abs(currentTop - previousTop) <= 1) {
+        stableFrames += 1;
+      } else {
+        stableFrames = 0;
+      }
+
+      previousTop = currentTop;
+
+      if (stableFrames >= 2) {
+        resolve();
+        return;
+      }
+
+      requestAnimationFrame(settle);
+    };
+
+    requestAnimationFrame(settle);
   });
 }
 
-function scrollToElementAfterRender(element) {
+async function scrollToElementAfterRender(element) {
   if (!element) return;
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      scrollToElement(element);
-    });
-  });
+  await waitForStableLayout(element);
+  scrollToElement(element);
 }
 
 function updateHeaderScrollState() {
@@ -278,8 +347,13 @@ function buildTypingHtml() {
   return `
     <div class="message-row" id="typing-row">
       ${createBotAvatarHtml()}
-      <div class="message" style="color:#666;font-style:italic;">
-        Đang tìm kiếm...
+      <div class="message message-loading" aria-live="polite">
+        <span>Đang tìm kiếm</span>
+        <span class="loading-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
       </div>
     </div>
   `;
@@ -289,12 +363,28 @@ function showTyping() {
   removeTyping();
   appendRow(buildTypingHtml());
   updateHeaderScrollState();
-  scrollToBottom();
+  requestAnimationFrame(() => {
+    scrollToBottom();
+  });
 }
 
 function removeTyping() {
   const typingRow = document.getElementById("typing-row");
   if (typingRow) typingRow.remove();
+}
+
+function waitForNextPaint() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);
+    });
+  });
+}
+
+function delay(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
 }
 
 function normalizeSuggestionText(text) {
@@ -401,8 +491,44 @@ function renderFollowups(suggestions) {
   `;
 }
 
+function renderResponseMeta(response) {
+  const source = String(response?.source || "").trim();
+  const references = Array.isArray(response?.references) ? response.references : [];
+
+  if (!source && references.length === 0) return "";
+
+  const sourceLabel = source === "ollama" ? "Ollama RAG" : "Structured";
+  const referenceItems = references
+    .map((item) => {
+      const title = String(item?.title || "").trim();
+      const sourceFile = String(item?.source_file || "").trim();
+      const label = title || sourceFile;
+
+      if (!label) return "";
+
+      return `
+        <span class="response-reference-item">
+          ${escapeHtml(label)}
+          ${sourceFile && sourceFile !== label ? `<span class="response-reference-file">${escapeHtml(sourceFile)}</span>` : ""}
+        </span>
+      `;
+    })
+    .filter(Boolean)
+    .join("");
+
+  return `
+    <div class="response-meta">
+      ${source ? `<div class="response-source">Nguồn xử lý: <span class="response-source-badge">${escapeHtml(sourceLabel)}</span></div>` : ""}
+      ${referenceItems ? `<div class="response-references"><div class="response-references-title">Tham chiếu:</div>${referenceItems}</div>` : ""}
+    </div>
+  `;
+}
+
 function renderTable(data) {
   if (!data || data.type !== "table") return "";
+
+  const tableClassName =
+    data.title === "THÔNG TƯ" ? "reply-table reply-table-documents" : "reply-table";
 
   const headers = (data.columns || [])
     .map((col) => `<th>${escapeHtml(col)}</th>`)
@@ -432,6 +558,65 @@ function renderTable(data) {
         `;
       }
 
+      if (data.title === "THÔNG TƯ") {
+        const documentPayload = {
+          type: "pdf_document",
+          title: "THÔNG TƯ",
+          document_type: row.document_type || "Thông tư",
+          name: row.ten || "",
+          so_hieu: row.so_hieu || "",
+          ngay_ban_hanh: row.ngay_ban_hanh || "",
+          ngay_hieu_luc: row.ngay_hieu_luc || "",
+          trang_thai: row.trang_thai || "",
+          tom_tat: row.tom_tat || "",
+          noi_dung: row.noi_dung || "",
+          co_quan_ban_hanh: row.co_quan_ban_hanh || "",
+          file_url: row.file_url || "",
+          file_name: row.file_name || "",
+        };
+        const encodedDocument = escapeHtml(JSON.stringify(documentPayload));
+        const quickAction = row.file_url
+          ? `
+            <div class="reply-table-action-group">
+              <button
+                type="button"
+                class="doc-card-btn is-secondary reply-table-action-btn"
+                data-doc-action="sidebar"
+                data-document="${encodedDocument}"
+              >
+                Xem tóm tắt
+              </button>
+              <button
+                type="button"
+                class="doc-card-btn is-primary reply-table-action-btn"
+                data-doc-action="modal"
+                data-document="${encodedDocument}"
+              >
+                Mở PDF
+              </button>
+            </div>
+          `
+          : `<span class="reply-table-action-empty">Chưa có file</span>`;
+
+        return `
+          <tr>
+            <td>${escapeHtml(row.ten)}</td>
+            <td>${escapeHtml(row.so_hieu)}</td>
+            <td>${escapeHtml(row.ngay_ban_hanh)}</td>
+            <td>
+              <div
+                class="reply-table-content-cell"
+                title="${escapeHtml(row.noi_dung || "")}"
+              >
+                ${escapeHtml(row.noi_dung)}
+              </div>
+            </td>
+            <td>${escapeHtml(row.trang_thai)}</td>
+            <td>${quickAction}</td>
+          </tr>
+        `;
+      }
+
       const cells = Object.values(row)
         .map((value) => `<td>${escapeHtml(value)}</td>`)
         .join("");
@@ -444,7 +629,7 @@ function renderTable(data) {
     <div class="reply-table-wrap">
       ${data.title ? `<div class="reply-table-title">${escapeHtml(data.title)}</div>` : ""}
       <div class="reply-table-scroll">
-        <table class="reply-table">
+        <table class="${tableClassName}">
           <thead>
             <tr>${headers}</tr>
           </thead>
@@ -648,6 +833,7 @@ function openPdfModal(data) {
 
 function addBotMessage(response, originalQuestion = "") {
   const contentHtml = renderBotContent(response);
+  const metaHtml = renderResponseMeta(response);
   const followupHtml = renderFollowups(
     getFollowupSuggestions(originalQuestion, response),
   );
@@ -657,6 +843,7 @@ function addBotMessage(response, originalQuestion = "") {
       ${createBotAvatarHtml()}
       <div class="message">
         ${contentHtml}
+        ${metaHtml}
         ${followupHtml}
         <hr />
       </div>
@@ -707,12 +894,26 @@ async function sendMessage() {
   userInput.value = "";
   showTyping();
   setSendingState(true);
+  const loadingStartedAt = Date.now();
 
   try {
+    await waitForNextPaint();
     const response = await fetchChatResponse(message);
+    const elapsed = Date.now() - loadingStartedAt;
+
+    if (elapsed < MIN_LOADING_TIME) {
+      await delay(MIN_LOADING_TIME - elapsed);
+    }
+
     removeTyping();
     addBotMessage(response, message);
   } catch (error) {
+    const elapsed = Date.now() - loadingStartedAt;
+
+    if (elapsed < MIN_LOADING_TIME) {
+      await delay(MIN_LOADING_TIME - elapsed);
+    }
+
     removeTyping();
     addBotMessage({ reply: "❌ Có lỗi xảy ra khi gửi câu hỏi." }, message);
     console.error(error);

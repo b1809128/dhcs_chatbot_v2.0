@@ -1,5 +1,6 @@
 import unittest
 from importlib.util import find_spec
+from unittest.mock import patch
 
 
 if find_spec("flask") is not None:
@@ -23,11 +24,18 @@ class AppAuthorizationTests(unittest.TestCase):
         self.assertIn("Chỉ tiêu tuyển sinh", payload["suggestions"])
 
     def test_guest_can_access_admission_queries(self):
-        response = self.client.post("/chat", json={"message": "tuyển sinh"})
+        with patch(
+            "services.chatbot.chat_service.ask_ollama",
+            return_value="Thông tin tuyển sinh đang được hệ thống tổng hợp.",
+        ):
+            response = self.client.post("/chat", json={"message": "tuyển sinh"})
 
         self.assertEqual(response.status_code, 200)
         payload = response.get_json()
-        self.assertEqual(payload["reply"], "TUYỂN SINH")
+        self.assertEqual(payload["reply"], "Thông tin tuyển sinh đang được hệ thống tổng hợp.")
+        self.assertEqual(payload["source"], "ollama")
+        self.assertIsNone(payload["data"])
+        self.assertGreaterEqual(len(payload["references"]), 1)
 
     def test_guest_can_access_specific_admission_topics(self):
         response = self.client.post("/chat", json={"message": "hồ sơ nhập học"})
@@ -35,6 +43,9 @@ class AppAuthorizationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         payload = response.get_json()
         self.assertEqual(payload["reply"], "HỒ SƠ TUYỂN SINH")
+        self.assertEqual(payload["source"], "structured")
+        self.assertEqual(payload["data"]["type"], "list")
+        self.assertEqual(payload["references"], [])
 
     def test_authenticated_user_can_access_internal_queries(self):
         login_response = self.client.post(
@@ -52,6 +63,8 @@ class AppAuthorizationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         payload = response.get_json()
         self.assertEqual(payload["reply"], "LỊCH HỌC")
+        self.assertEqual(payload["source"], "structured")
+        self.assertEqual(payload["references"], [])
 
     def test_authenticated_user_can_get_specific_pdf_document(self):
         self.client.post(
@@ -67,6 +80,8 @@ class AppAuthorizationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         payload = response.get_json()
         self.assertEqual(payload["data"]["type"], "pdf_document")
+        self.assertEqual(payload["source"], "structured")
+        self.assertEqual(payload["references"], [])
         self.assertEqual(
             payload["data"]["file_url"],
             "/documents/thong_tu/thong_tu_62_2023.pdf",

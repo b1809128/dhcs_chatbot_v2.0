@@ -14,11 +14,11 @@ PUBLIC_ADMISSION_SUGGESTIONS = [
 ]
 
 AUTHENTICATED_FEATURE_SUGGESTIONS = [
-    "Lịch học lớp ĐTHS3",
+    "Lịch học",
     "Lịch thi",
     "Giờ mở cửa thư viện",
     "Thông tư",
-    "Bộ luật ban hành",
+    "Luật ban hành",
 ]
 
 

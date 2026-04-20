@@ -104,6 +104,9 @@ Chứa tài nguyên tĩnh cho frontend.
 Các file chính:
 - `static/css/style.css`: giao diện chat
 - `static/js/script.js`: gửi câu hỏi, nhận phản hồi, render bảng/list/text/pdf_document, hiển thị gợi ý tiếp theo, mở sidebar và modal PDF
+  - hiển thị loading `Đang tìm kiếm` trong lúc đợi phản hồi
+  - cuộn mượt đến phần đầu câu trả lời mới
+  - bảng `THÔNG TƯ` có thao tác `Xem tóm tắt` và `Mở PDF` ngay trên từng dòng
 - `static/image/*`: logo, avatar chatbot, favicon
 
 ### `services/`
@@ -144,8 +147,11 @@ Các file quan trọng:
 - `context_builders.py`
   - tập hợp các context builder theo domain
   - cung cấp:
-    - `build_context()`: tạo context text để gửi sang LLM
     - `build_direct_context()`: chọn câu trả lời structured trực tiếp nếu có
+    - `build_context()`: tạo context text fallback để gửi sang RAG/LLM
+  - hiện có 2 nhóm builder:
+    - `DIRECT_CONTEXT_BUILDERS`: ưu tiên `schedule -> admission -> document -> library -> study_material`
+    - `FALLBACK_CONTEXT_BUILDERS`: gom `document + study_material + library` để dựng context khi không có structured response phù hợp
 
 - `schedule_context.py`
   - xử lý lịch học, lịch thi
@@ -153,6 +159,8 @@ Các file quan trọng:
 - `document_context.py`
   - xử lý công văn, thông tư, nghị định, luật, đơn, tổ chức
   - match tài liệu PDF pháp lý theo `so_hieu`, `file_pdf`, `tu_khoa`
+  - nếu hỏi chung `thông tư`, chatbot có thể trả bảng `THÔNG TƯ` với truy cập nhanh đến PDF
+  - nếu dữ liệu `luật` hiện chỉ có 1 văn bản, câu hỏi chung như `luật ban hành` có thể trả trực tiếp `pdf_document`
 
 - `library_context.py`
   - xử lý tra cứu sách, giờ mở cửa, liên hệ thư viện, quy định mượn trả, tài liệu đọc tại chỗ
@@ -236,16 +244,23 @@ Trong `app.py`:
 Luồng cơ bản:
 1. chuẩn hóa câu hỏi
 2. gọi `build_direct_context()`
-3. nếu có câu trả lời structured thì trả thẳng cho frontend
-4. nếu không có thì gọi `build_context()` để gom context text
-5. gửi context sang `ask_ollama()`
-6. trả về `reply`, `data`, `suggestions`
+3. nếu kết quả là `table`, `list` hoặc `pdf_document` thì trả structured response thẳng cho frontend
+4. nếu có `structured_data` nhưng không thuộc nhóm trả thẳng, gọi `build_rag_context(preferred_context=structured_data)` để ưu tiên dựng context từ dữ liệu đã match
+5. nếu chưa có đủ context thì fallback sang `format_context_data(structured_data)` hoặc `build_context()`
+6. gửi context cuối cùng sang `ask_ollama()`
+7. trả về `reply`, `data`, `suggestions`, `references`, `source`
+
+Ghi chú:
+- `source="structured"` khi frontend render từ dữ liệu có cấu trúc
+- `source="ollama"` khi câu trả lời được sinh từ LLM
+- `references` dùng để hiển thị các nguồn RAG đã tham chiếu
 
 ### 4. Frontend render kết quả
 
 `static/js/script.js` sẽ:
 - hiển thị message người dùng
 - gọi API `/chat`
+- chèn trạng thái `Đang tìm kiếm` trong lúc chờ
 - render kết quả theo loại:
   - `table`
   - `list`
@@ -255,6 +270,10 @@ Luồng cơ bản:
 - nếu là `pdf_document` thì cho phép:
   - mở sidebar tóm tắt
   - mở modal xem PDF
+- nếu là bảng `THÔNG TƯ` thì cho phép:
+  - `Xem tóm tắt` ngay trên từng dòng
+  - `Mở PDF` ngay trên từng dòng
+- sau khi render, khung chat sẽ cuộn mượt tới phần đầu câu trả lời mới
 
 ## Dạng phản hồi của backend
 
@@ -314,7 +333,15 @@ Backend có thể trả về:
 {
   "reply": "...câu trả lời từ Ollama...",
   "data": null,
-  "suggestions": []
+  "suggestions": [],
+  "references": [
+    {
+      "title": "Chỉ tiêu tuyển sinh năm 2026",
+      "domain": "admission",
+      "source_file": "tuyen_sinh.json"
+    }
+  ],
+  "source": "ollama"
 }
 ```
 
@@ -410,7 +437,9 @@ Thêm logic vào một context builder phù hợp, ví dụ:
 - `admission_context.py`
 - `document_context.py`
 
-Sau đó đảm bảo builder đó được gọi từ `context_builders.py`.
+Sau đó đảm bảo builder đó:
+- được đặt đúng thứ tự trong `DIRECT_CONTEXT_BUILDERS` nếu muốn trả lời trực tiếp
+- hoặc được thêm vào `FALLBACK_CONTEXT_BUILDERS` nếu chỉ muốn dùng để tạo context cho RAG/LLM
 
 ## Cách làm việc theo nhóm
 

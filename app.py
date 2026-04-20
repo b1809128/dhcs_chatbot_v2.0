@@ -110,5 +110,5 @@ def chat():
 
 
 if __name__ == "__main__":
-    print("🚀 Khởi động chatbot ĐHCS tại http://localhost:5000")
-    app.run(debug=True, port=5000)
+    print("🚀 Khởi động chatbot ĐHCS tại http://localhost:5001")
+    app.run(debug=True, port=5001)

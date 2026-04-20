@@ -27,7 +27,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@500;600;700;800&family=Merriweather:wght@700&display=swap"
     />
     <link
       rel="stylesheet"
@@ -35,6 +35,14 @@
     />
   </head>
   <body data-authenticated="{{ 'true' if is_authenticated else 'false' }}">
+    <div class="gov-topbar">
+      <div class="gov-topbar-inner">
+        <span class="gov-topbar-label">Cổng thông tin hỗ trợ học viên</span>
+        <span class="gov-topbar-divider"></span>
+        <span class="gov-topbar-meta">Tra cứu tuyển sinh, lịch học, thư viện, biểu mẫu và văn bản</span>
+      </div>
+    </div>
+
     <header class="header-top site-banner">
       <div class="logo-title site-brand">
         <img
@@ -43,15 +51,16 @@
           alt="Logo Trường Đại học Cảnh sát Nhân dân"
         />
         <div class="title site-brand-text">
-          TRƯỜNG ĐẠI HỌC<br />
-          <span>CẢNH SÁT NHÂN DÂN</span>
+          <span class="site-brand-title-line">TRƯỜNG ĐẠI HỌC</span>
+          <span class="site-brand-title-line">CẢNH SÁT NHÂN DÂN</span>
         </div>
       </div>
       <div class="dia_chi site-address">
-        <i class="fa-solid fa-house dia_chi_icon"></i>
+        <i class="fa-solid fa-building-columns dia_chi_icon"></i>
         <div class="site-address-text">
           <div class="site-address-label">Trụ sở chính</div>
-          <div>36 Nguyễn Hữu Thọ - Phường Tân Hưng - TP. Hồ Chí Minh</div>
+          <div class="site-address-line">36 Nguyễn Hữu Thọ - Phường Tân Hưng</div>
+          <div class="site-address-line">TP. Hồ Chí Minh</div>
         </div>
       </div>
     </header>
@@ -65,8 +74,10 @@
         />
 
         <div class="title chatbot-hero-copy">
-          <div class="main chatbot-hero-title">DEMO PPU CHATBOT</div>
-          <div class="sub chatbot-hero-subtitle">Hỗ trợ học viên T05</div>
+          <div class="main chatbot-hero-title">TRỢ LÝ THÔNG TIN HỌC VIÊN</div>
+          <div class="sub chatbot-hero-subtitle">
+            Phục vụ tra cứu thông tin học tập, tuyển sinh và văn bản nghiệp vụ
+          </div>
         </div>
       </div>
 
@@ -137,13 +148,14 @@
             <img
               src="{{ url_for('static', filename='image/chatbotai.png') }}"
               class="bot-avatar-img"
+              alt="Trợ lý thông tin"
             />
           </div>
           <div class="message">
             {% if is_authenticated %}
-              Xin chào! Tôi là trợ lý AI hỗ trợ học viên trường ĐHCS. Bạn có thể hỏi về tuyển sinh, lịch học, thư viện, tài liệu và các nội dung nội bộ khác.
+              Kính chào đồng chí. Tôi là trợ lý thông tin của Trường Đại học Cảnh sát Nhân dân. Đồng chí có thể tra cứu tuyển sinh, lịch học, thư viện, tài liệu và các nội dung nội bộ khác.
             {% else %}
-              Xin chào! Tôi là trợ lý AI hỗ trợ học viên trường ĐHCS. Khi chưa đăng nhập, bạn chỉ có thể tra cứu thông tin tuyển sinh.
+              Kính chào đồng chí. Tôi là trợ lý thông tin của Trường Đại học Cảnh sát Nhân dân. Khi chưa đăng nhập, hệ thống hỗ trợ tra cứu các nội dung công khai về tuyển sinh.
             {% endif %}
             <hr />
           </div>
@@ -151,14 +163,14 @@
 
         <!-- SUGGEST -->
         <div class="suggest-box">
-          <div class="suggest-title">🤔 Câu hỏi gợi ý cho bạn:</div>
+          <div class="suggest-title">Gợi ý tra cứu nhanh</div>
           {% for suggestion in initial_suggestions %}
           <button
             type="button"
             class="suggest-btn"
             data-suggestion="{{ suggestion }}"
           >
-            💡 {{ suggestion }}
+            {{ suggestion }}
           </button>
           {% endfor %}
         </div>
@@ -174,15 +186,15 @@
           placeholder="{{ input_placeholder }}"
         />
 
-        <button id="send-btn" type="button">➤</button>
+        <button id="send-btn" type="button" aria-label="Gửi câu hỏi">Gửi</button>
       </div>
 
       <div class="note">
-        📋 Mọi thông tin pháp lý chính thức xin tham khảo văn bản trên
+        Mọi thông tin chính thức vui lòng đối chiếu tại
         <a
           href="https://www.dhcsnd.edu.vn"
           class="note-link"
-          >Website/trang thông báo của trường ĐHCS</a
+          >website và trang thông báo của Trường Đại học Cảnh sát Nhân dân</a
         >
       </div>
     </div>

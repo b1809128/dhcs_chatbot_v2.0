@@ -1,12 +1,9 @@
 from typing import List, Optional
 
-from .keywords import ADMISSION_PRIORITY_KEYWORDS, STUDY_MATERIAL_KEYWORDS
+from .keywords import STUDY_MATERIAL_KEYWORDS
+from .query_guards import is_admission_query
 from .types import JsonDict, StructuredContext
 from .utils import build_table_context, contains_any, load_data
-
-
-def is_admission_query(text: str) -> bool:
-    return contains_any(text, ADMISSION_PRIORITY_KEYWORDS)
 
 
 def build_study_material_context(query: str) -> Optional[StructuredContext]:

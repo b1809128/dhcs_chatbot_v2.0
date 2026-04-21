@@ -45,7 +45,7 @@ class AppAuthorizationTests(unittest.TestCase):
         self.assertEqual(payload["reply"], "HỒ SƠ TUYỂN SINH")
         self.assertEqual(payload["source"], "structured")
         self.assertEqual(payload["data"]["type"], "list")
-        self.assertEqual(payload["references"], [])
+        self.assertGreaterEqual(len(payload["references"]), 1)
 
     def test_authenticated_user_can_access_internal_queries(self):
         login_response = self.client.post(
@@ -64,7 +64,7 @@ class AppAuthorizationTests(unittest.TestCase):
         payload = response.get_json()
         self.assertEqual(payload["reply"], "LỊCH HỌC")
         self.assertEqual(payload["source"], "structured")
-        self.assertEqual(payload["references"], [])
+        self.assertGreaterEqual(len(payload["references"]), 1)
 
     def test_authenticated_user_can_get_specific_pdf_document(self):
         self.client.post(
@@ -81,7 +81,7 @@ class AppAuthorizationTests(unittest.TestCase):
         payload = response.get_json()
         self.assertEqual(payload["data"]["type"], "pdf_document")
         self.assertEqual(payload["source"], "structured")
-        self.assertEqual(payload["references"], [])
+        self.assertGreaterEqual(len(payload["references"]), 1)
         self.assertEqual(
             payload["data"]["file_url"],
             "/documents/thong_tu/thong_tu_62_2023.pdf",
@@ -98,6 +98,21 @@ class AppAuthorizationTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("application/pdf", response.content_type)
+
+    def test_document_route_serves_word_file(self):
+        response = self.client.get("/documents/word_don_xin_nghi/nghi_phep.docx")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            response.content_type,
+        )
+
+    def test_document_download_route_uses_attachment(self):
+        response = self.client.get("/documents/download/de_thi/CA1.pdf")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("attachment", response.headers.get("Content-Disposition", ""))
 
 
 if __name__ == "__main__":

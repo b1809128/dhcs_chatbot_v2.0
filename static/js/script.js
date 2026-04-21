@@ -8,11 +8,14 @@ const docSidebarTitle = document.getElementById("doc-sidebar-title");
 const docSidebarBody = document.getElementById("doc-sidebar-body");
 const docOpenModalBtn = document.getElementById("doc-open-modal-btn");
 const docOpenNewTab = document.getElementById("doc-open-new-tab");
+const docDownloadLink = document.getElementById("doc-download-link");
 const pdfModal = document.getElementById("pdf-modal");
 const pdfModalBackdrop = document.getElementById("pdf-modal-backdrop");
 const pdfModalCloseBtn = document.getElementById("pdf-modal-close");
 const pdfModalTitle = document.getElementById("pdf-modal-title");
 const pdfModalFrame = document.getElementById("pdf-modal-frame");
+const pdfModalFallback = document.getElementById("pdf-modal-fallback");
+const pdfModalDownload = document.getElementById("pdf-modal-download");
 
 const BOT_AVATAR_SRC = "/static/image/chatbotai.png";
 const MIN_LOADING_TIME = 1800;
@@ -21,11 +24,28 @@ let activeDocumentData = null;
 let activeScrollAnimationFrame = null;
 const ADMISSION_TITLES = new Set([
   "TUYỂN SINH",
+  "TUYỂN SINH VĂN BẰNG 2",
   "BÀI THI ĐÁNH GIÁ",
+  "THÔNG TIN BÀI THI ĐÁNH GIÁ",
+  "KIỂM TRA SƠ BỘ ĐIỀU KIỆN",
+  "TÓM TẮT TUYỂN SINH VB2CA 2026",
+  "TIMELINE TUYỂN SINH VB2CA 2026",
+  "CHECKLIST HỒ SƠ SƠ TUYỂN",
+  "SO SÁNH PHƯƠNG THỨC TUYỂN SINH",
+  "TÀI LIỆU VÀ HÀNH ĐỘNG TUYỂN SINH",
   "HỒ SƠ TUYỂN SINH",
   "NGÀNH TUYỂN SINH",
+  "NGÀNH ĐƯỢC PHÉP ĐĂNG KÝ",
   "THÔNG TIN TRƯỜNG",
   "LIÊN HỆ TUYỂN SINH",
+  "CHỈ TIÊU TUYỂN SINH",
+  "THỦ TỤC SƠ TUYỂN",
+  "ƯU TIÊN TUYỂN SINH",
+  "ĐÀO TẠO VÀ CHÍNH SÁCH",
+  "XÉT TUYỂN VÀ CÁCH TÍNH ĐIỂM",
+  "TIÊU CHUẨN SỨC KHỎE",
+  "PHẠM VI TUYỂN SINH",
+  "THÔNG BÁO TUYỂN SINH",
 ]);
 
 const FOLLOWUP_MAP = [
@@ -403,7 +423,16 @@ function extractResponseContextValues(response) {
 }
 
 function getSuggestionLimit(response) {
-  return ADMISSION_TITLES.has(response?.data?.title) ? 8 : 4;
+  const title = response?.data?.title;
+  const source = String(response?.source || "").toLowerCase();
+  const hasAdmissionSuggestion = Array.isArray(response?.suggestions)
+    && response.suggestions.some((item) => normalizeSuggestionText(item).includes("tuyển sinh"));
+
+  if (ADMISSION_TITLES.has(title) || (source === "ollama" && hasAdmissionSuggestion)) {
+    return 12;
+  }
+
+  return 4;
 }
 
 function uniqueSuggestions(suggestions, question, limit) {
@@ -495,22 +524,36 @@ function renderResponseMeta(response) {
   const source = String(response?.source || "").trim();
   const references = Array.isArray(response?.references) ? response.references : [];
 
-  if (!source && references.length === 0) return "";
-
   const sourceLabel = source === "ollama" ? "Ollama RAG" : "Structured";
   const referenceItems = references
     .map((item) => {
       const title = String(item?.title || "").trim();
       const sourceFile = String(item?.source_file || "").trim();
+      const note = String(item?.note || "").trim();
+      const fileUrl = String(item?.file_url || "").trim();
+      const downloadUrl = String(item?.download_url || fileUrl).trim();
       const label = title || sourceFile;
 
       if (!label) return "";
 
       return `
-        <span class="response-reference-item">
-          ${escapeHtml(label)}
-          ${sourceFile && sourceFile !== label ? `<span class="response-reference-file">${escapeHtml(sourceFile)}</span>` : ""}
-        </span>
+        <div class="response-reference-card">
+          <div class="response-reference-main">
+            <div class="response-reference-name">${escapeHtml(label)}</div>
+            ${sourceFile && sourceFile !== label ? `<div class="response-reference-file">${escapeHtml(sourceFile)}</div>` : ""}
+            ${note ? `<div class="response-reference-file">${escapeHtml(note)}</div>` : ""}
+          </div>
+          ${
+            fileUrl
+              ? `
+                <div class="response-reference-actions">
+                  <a href="${escapeHtml(fileUrl)}" target="_blank" rel="noopener noreferrer">Xem</a>
+                  <a href="${escapeHtml(downloadUrl)}" download>Tải</a>
+                </div>
+              `
+              : ""
+          }
+        </div>
       `;
     })
     .filter(Boolean)
@@ -519,7 +562,14 @@ function renderResponseMeta(response) {
   return `
     <div class="response-meta">
       ${source ? `<div class="response-source">Nguồn xử lý: <span class="response-source-badge">${escapeHtml(sourceLabel)}</span></div>` : ""}
-      ${referenceItems ? `<div class="response-references"><div class="response-references-title">Tham chiếu:</div>${referenceItems}</div>` : ""}
+      <div class="response-references">
+        <div class="response-references-title">Tài liệu tham khảo</div>
+        ${
+          referenceItems
+            ? referenceItems
+            : `<div class="response-reference-empty">Chưa có tài liệu tham khảo.</div>`
+        }
+      </div>
     </div>
   `;
 }
@@ -670,18 +720,46 @@ function renderTextBlock(data) {
   `;
 }
 
+function getDocumentDownloadUrl(data) {
+  return data?.download_url || data?.file_url || "#";
+}
+
+function getDocumentFileType(data) {
+  const explicitType = String(data?.file_type || "").toLowerCase();
+  if (explicitType) return explicitType;
+
+  const fileName = String(data?.file_name || data?.file_url || "").toLowerCase();
+  if (fileName.endsWith(".docx")) return "docx";
+  if (fileName.endsWith(".doc")) return "doc";
+  if (fileName.endsWith(".pdf")) return "pdf";
+
+  return "file";
+}
+
+function getDocumentIconClass(data) {
+  const fileType = getDocumentFileType(data);
+  if (fileType === "pdf") return "fa-solid fa-file-pdf";
+  if (fileType === "doc" || fileType === "docx") return "fa-solid fa-file-word";
+  return "fa-solid fa-file-lines";
+}
+
+function getDocumentPreviewLabel(data) {
+  return getDocumentFileType(data) === "pdf" ? "Xem file PDF" : "Xem nhanh";
+}
+
 function renderDocumentCard(data) {
-  if (!data || data.type !== "pdf_document") return "";
+  if (!data || !["pdf_document", "document_file"].includes(data.type)) return "";
 
   const summaryText = data.tom_tat || data.noi_dung || "Chưa có tóm tắt cho tài liệu này.";
   const encodedDocument = escapeHtml(JSON.stringify(data));
+  const downloadUrl = getDocumentDownloadUrl(data);
 
   return `
     <div class="doc-card">
       <div class="doc-card-head">
         <span class="doc-card-type">
-          <i class="fa-solid fa-file-pdf"></i>
-          ${escapeHtml(data.document_type || "Tài liệu PDF")}
+          <i class="${getDocumentIconClass(data)}"></i>
+          ${escapeHtml(data.document_type || "Tài liệu")}
         </span>
         ${data.trang_thai ? `<span class="doc-card-status">${escapeHtml(data.trang_thai)}</span>` : ""}
       </div>
@@ -716,16 +794,46 @@ function renderDocumentCard(data) {
           data-doc-action="modal"
           data-document="${encodedDocument}"
         >
-          Xem file PDF
+          ${escapeHtml(getDocumentPreviewLabel(data))}
         </button>
+        <a
+          class="doc-card-btn is-secondary"
+          href="${escapeHtml(downloadUrl)}"
+          download
+        >
+          Tải về
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function renderDocumentCollection(data) {
+  if (!data || data.type !== "document_collection") return "";
+
+  const documents = Array.isArray(data.documents) ? data.documents : [];
+  const cards = documents
+    .map((document) => renderDocumentCard(document))
+    .join("");
+
+  return `
+    <div class="doc-collection">
+      ${data.title ? `<div class="reply-table-title">${escapeHtml(data.title)}</div>` : ""}
+      ${data.description ? `<div class="doc-collection-description">${escapeHtml(data.description)}</div>` : ""}
+      <div class="doc-collection-grid">
+        ${cards}
       </div>
     </div>
   `;
 }
 
 function renderBotContent(response) {
-  if (response?.data?.type === "pdf_document") {
+  if (["pdf_document", "document_file"].includes(response?.data?.type)) {
     return renderDocumentCard(response.data);
+  }
+
+  if (response?.data?.type === "document_collection") {
+    return renderDocumentCollection(response.data);
   }
 
   if (response?.data?.type === "table") {
@@ -797,12 +905,19 @@ function openSidebar(data) {
     .join("");
 
   docOpenModalBtn.disabled = !data.file_url;
+  docOpenModalBtn.textContent = getDocumentPreviewLabel(data);
   if (data.file_url) {
     docOpenNewTab.href = data.file_url;
     docOpenNewTab.setAttribute("aria-disabled", "false");
   } else {
     docOpenNewTab.href = "#";
     docOpenNewTab.setAttribute("aria-disabled", "true");
+  }
+
+  if (docDownloadLink) {
+    const downloadUrl = getDocumentDownloadUrl(data);
+    docDownloadLink.href = downloadUrl;
+    docDownloadLink.setAttribute("aria-disabled", downloadUrl === "#" ? "true" : "false");
   }
 
   docSidebarBackdrop.hidden = false;
@@ -817,6 +932,11 @@ function closePdfModal() {
   pdfModal.hidden = true;
   pdfModal.setAttribute("aria-hidden", "true");
   pdfModalFrame.removeAttribute("src");
+  pdfModalFrame.hidden = false;
+  if (pdfModalFallback) {
+    pdfModalFallback.hidden = true;
+    pdfModalFallback.innerHTML = "";
+  }
   updateOverlayState();
 }
 
@@ -824,10 +944,58 @@ function openPdfModal(data) {
   if (!pdfModal || !pdfModalFrame || !pdfModalTitle || !data?.file_url) return;
 
   activeDocumentData = data;
-  pdfModalTitle.textContent = data.name || data.title || "Nội dung PDF";
+  const fileType = getDocumentFileType(data);
+  const downloadUrl = getDocumentDownloadUrl(data);
+
+  pdfModalTitle.textContent = data.name || data.title || "Nội dung tài liệu";
   pdfModal.hidden = false;
   pdfModal.setAttribute("aria-hidden", "false");
-  pdfModalFrame.src = data.file_url;
+
+  if (pdfModalDownload) {
+    pdfModalDownload.href = downloadUrl;
+    pdfModalDownload.hidden = downloadUrl === "#";
+  }
+
+  if (fileType === "pdf") {
+    pdfModalFrame.hidden = false;
+    pdfModalFrame.src = data.file_url;
+    if (pdfModalFallback) {
+      pdfModalFallback.hidden = true;
+      pdfModalFallback.innerHTML = "";
+    }
+  } else {
+    pdfModalFrame.hidden = true;
+    pdfModalFrame.removeAttribute("src");
+    if (pdfModalFallback) {
+      pdfModalFallback.hidden = false;
+      pdfModalFallback.innerHTML = `
+        <div class="document-preview-fallback">
+          <div class="document-preview-icon">
+            <i class="${getDocumentIconClass(data)}"></i>
+          </div>
+          <div class="document-preview-title">${escapeHtml(data.name || "Tài liệu Word")}</div>
+          <div class="document-preview-text">
+            Trình duyệt thường không xem trực tiếp file Word trong khung chat.
+            Bạn có thể mở tab mới hoặc tải file về để chỉnh sửa.
+          </div>
+          ${
+            data.tom_tat || data.noi_dung
+              ? `<div class="document-preview-summary">${nl2br(data.tom_tat || data.noi_dung)}</div>`
+              : ""
+          }
+          <div class="document-preview-actions">
+            <a class="doc-primary-btn" href="${escapeHtml(data.file_url)}" target="_blank" rel="noopener noreferrer">
+              Mở tab mới
+            </a>
+            <a class="doc-secondary-btn" href="${escapeHtml(downloadUrl)}" download>
+              Tải về
+            </a>
+          </div>
+        </div>
+      `;
+    }
+  }
+
   updateOverlayState();
 }
 
@@ -842,6 +1010,7 @@ function addBotMessage(response, originalQuestion = "") {
     <div class="message-row">
       ${createBotAvatarHtml()}
       <div class="message">
+        <span class="bot-answer-anchor" aria-hidden="true"></span>
         ${contentHtml}
         ${metaHtml}
         ${followupHtml}
@@ -850,21 +1019,8 @@ function addBotMessage(response, originalQuestion = "") {
     </div>
   `);
 
-  const newTableTitle = messageRow?.querySelector(".reply-table-title");
-  if (newTableTitle) {
-    scrollToElementAfterRender(newTableTitle);
-    return;
-  }
-
-  const newTable = messageRow?.querySelector(".reply-table-wrap");
-  if (newTable) {
-    scrollToElementAfterRender(newTable);
-    return;
-  }
-
-  requestAnimationFrame(() => {
-    scrollToBottom();
-  });
+  const answerStart = messageRow?.querySelector(".bot-answer-anchor") || messageRow;
+  scrollToElementAfterRender(answerStart);
 }
 
 async function fetchChatResponse(message) {

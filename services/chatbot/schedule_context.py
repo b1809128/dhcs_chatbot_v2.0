@@ -8,6 +8,22 @@ from .utils import build_table_context, build_text_context, contains_any, load_d
 def build_schedule_context(query: str) -> Optional[StructuredContext]:
     if not contains_any(query, SCHEDULE_KEYWORDS):
         return None
+    if contains_any(
+        query,
+        [
+            "tuyển sinh",
+            "tuyen sinh",
+            "văn bằng 2",
+            "văn bằng hai",
+            "van bang 2",
+            "van bang hai",
+            "vb2",
+            "vb2ca",
+            "bài thi đánh giá",
+            "20/09/2026",
+        ],
+    ):
+        return None
 
     data = load_data("lich_hoc.json")
     if not data:

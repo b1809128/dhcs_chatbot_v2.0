@@ -1,9 +1,9 @@
 {
   "thong_tin_chung": {
     "ten_truong_vi": "Trường Đại học Cảnh sát nhân dân",
-    "ten_truong_en": "People’s Police University",
+    "ten_truong_en": "People's Police University",
     "ma_truong": "CSS",
-    "ngay_dang": "10.04.2026",
+    "ngay_dang": "19/03/2026",
     "website": "https://dhcsnd.edu.vn",
     "email_tuyen_sinh": "t05tuyensinh@dhcsnd.edu.vn",
     "dia_chi": {
@@ -29,51 +29,165 @@
       "quy_che_tuyen_sinh": "https://dhcsnd.edu.vn/thong-bao-nha-truong",
       "thong_tin_hoat_dong": "https://dhcsnd.edu.vn/thong-bao-nha-truong"
     },
-    "viec_lam_sau_tot_nghiep": "Sinh viên sau khi tốt nghiệp sẽ được phân công, bố trí công tác tại Công an các đơn vị, địa phương theo quy định."
+    "viec_lam_sau_tot_nghiep": "Sau khi tốt nghiệp, học viên được xem xét phong cấp bậc hàm Trung úy nếu không vi phạm bị xử lý kỷ luật và được phân công công tác theo kế hoạch của Bộ Công an."
+  },
+  "thong_bao_tuyen_sinh": {
+    "so_hieu": "56/TB-CAT-PX01",
+    "co_quan_ban_hanh": "Công an tỉnh An Giang",
+    "ngay_ban_hanh": "19/03/2026",
+    "ten_thong_bao": "Thông báo tuyển sinh tuyển mới đại học đối với công dân có bằng tốt nghiệp trình độ đại học trở lên (VB2CA) năm 2026",
+    "file_pdf": "thong_tu/tuyen_sinh_2026.pdf"
   },
   "tuyen_sinh_dai_hoc_chinh_quy": {
     "doi_tuong_du_tuyen": [
-      "Công dân Việt Nam đã có bằng tốt nghiệp trình độ đại học trở lên",
-      "Sinh viên năm cuối các trường đại học được đăng ký dự tuyển nếu đến ngày 20/8/2026 có bằng tốt nghiệp đại học",
-      "Chiến sĩ nghĩa vụ Công an tại ngũ có thể dự tuyển theo điều kiện riêng của thông báo năm 2026"
+      "Công dân Việt Nam tốt nghiệp đại học chính quy các trường đại học trong và ngoài nước, xếp loại tốt nghiệp từ loại khá trở lên; không áp dụng đối với hình thức liên thông đại học.",
+      "Công dân tốt nghiệp khối ngành kỹ thuật, khoa học tự nhiên, khoa học máy tính, công nghệ thông tin; điều kiện là xếp hạng bằng tốt nghiệp loại trung bình trở lên, trong đó điểm trung bình các môn thi tốt nghiệp hoặc điểm trung bình các học phần chuyên môn đạt mức khá trở lên, hoặc kết quả khóa luận, đồ án tốt nghiệp, báo cáo thực tập xếp loại đạt trở lên.",
+      "Chiến sĩ nghĩa vụ Công an tại ngũ có thời gian công tác từ 15 tháng trở lên tính đến tháng thi tuyển, có bằng tốt nghiệp đại học chính quy xếp hạng bằng từ loại trung bình trở lên."
     ],
     "dieu_kien_chung": [
-      "Ngoài điều kiện theo pháp luật và quy định của Bộ Giáo dục và Đào tạo, thí sinh phải đáp ứng điều kiện tuyển sinh của Bộ Công an.",
-      "Tốt nghiệp đại học hình thức chính quy do cơ sở giáo dục đại học của Việt Nam hoặc nước ngoài cấp bằng.",
-      "Xếp loại bằng tốt nghiệp từ loại khá trở lên; riêng chiến sĩ nghĩa vụ Công an tại ngũ có thời gian công tác từ 15 tháng trở lên tính đến tháng thi tuyển được chấp nhận từ loại trung bình trở lên.",
-      "Không tuyển sinh đối tượng trình độ liên thông đại học giữa trung cấp, cao đẳng với đại học hoặc hình thức đào tạo đại học đối với người đã có bằng tốt nghiệp đại học trở lên.",
-      "Đối với văn bằng do cơ sở đào tạo nước ngoài cấp, phải được Cục Quản lý chất lượng thuộc Bộ Giáo dục và Đào tạo công nhận.",
-      "Nếu bằng tốt nghiệp không ghi rõ xếp loại thì xác định theo điểm trung bình tích lũy: thang 4 từ 2.5 trở lên là khá, từ 3.2 là giỏi, từ 3.6 là xuất sắc; thang 10 từ 7.0 trở lên là khá, từ 8.0 là giỏi, từ 9.0 là xuất sắc.",
-      "Thí sinh đăng ký dự tuyển nhóm ngành nghiệp vụ Cảnh sát tại Trường Đại học Cảnh sát nhân dân không bị giới hạn lĩnh vực đào tạo, ngành đào tạo ở điều kiện chung.",
-      "Phạm vi tuyển sinh của trường là khu vực phía Nam, từ thành phố Đà Nẵng trở vào theo phân vùng tuyển sinh của Bộ Công an.",
+      "Người dự tuyển ngoài bảo đảm điều kiện theo quy định của Bộ Giáo dục và Đào tạo còn phải đáp ứng điều kiện, tiêu chuẩn của Bộ Công an.",
+      "Tốt nghiệp đại học hình thức chính quy do cơ sở giáo dục đại học của Việt Nam hoặc nước ngoài cấp bằng, xếp loại tốt nghiệp từ loại khá trở lên; không tuyển sinh đối tượng trình độ liên thông đại học.",
+      "Sinh viên năm cuối các trường đại học được đăng ký dự tuyển; đến ngày xét tuyển của các trường CAND, ngày 20/8/2026, phải có bằng tốt nghiệp đại học. Nếu chưa được cấp bằng, được dùng giấy xác nhận tốt nghiệp hoặc công nhận tốt nghiệp đại học để thay thế khi nộp hồ sơ, nhưng đến thời gian nhập học phải có bằng tốt nghiệp.",
+      "Văn bằng do cơ sở đào tạo nước ngoài cấp phải được Cục Quản lý chất lượng thuộc Bộ Giáo dục và Đào tạo công nhận.",
+      "Nếu văn bằng không ghi rõ xếp loại thì xác định theo điểm trung bình tích lũy: thang điểm 4 từ 3.6 đến 4.0 là xuất sắc, từ 3.2 đến cận 3.6 là giỏi, từ 2.5 đến cận 3.2 là khá; thang điểm 10 từ 9.0 đến 10 là xuất sắc, từ 8.0 đến cận 9.0 là giỏi, từ 7.0 đến cận 8.0 là khá.",
+      "Bảo đảm tiêu chuẩn chính trị theo quy định của Bộ Công an.",
+      "Không quá 30 tuổi tính đến ngày dự thi.",
       "Mỗi thí sinh chỉ được đăng ký 01 nguyện vọng dự tuyển vào 01 học viện hoặc trường Công an nhân dân."
+    ],
+    "tieu_chuan_suc_khoe": [
+      "Đủ sức khỏe tuyển vào Công an nhân dân theo Thông tư số 62/2023/TT-BCA ngày 14/11/2023 và Thông tư số 131/2025/TT-BCA ngày 25/12/2025.",
+      "Chiến sĩ nghĩa vụ Công an tại ngũ áp dụng tiêu chuẩn chiều cao tuyển chọn công dân thực hiện nghĩa vụ tham gia Công an nhân dân tại thời điểm tuyển chọn.",
+      "Thí sinh dự tuyển có chiều cao từ 1m64 đến 1m95 đối với nam, từ 1m58 đến 1m80 đối với nữ.",
+      "Trường hợp là người dân tộc thiểu số và thí sinh tốt nghiệp khối khoa học tự nhiên, kỹ thuật, khoa học máy tính, công nghệ thông tin: chiều cao từ 1m62 đến 1m95 đối với nam, từ 1m56 đến 1m80 đối với nữ.",
+      "Riêng thí sinh thuộc Đối tượng 01: chiều cao từ 1m60 đến 1m95 đối với nam, từ 1m55 đến 1m80 đối với nữ.",
+      "Chỉ số khối cơ thể BMI đạt từ 18.5 đến 30.",
+      "Thị lực không kính mỗi mắt đạt 09/10, tổng thị lực hai mắt đạt 18/10 trở lên. Nếu mắt bị tật khúc xạ cận thị hoặc viễn thị thì mỗi mắt không quá 03 đi-ốp; nếu loạn thị thì loạn thị sinh lý hoặc mỗi mắt dưới 01 đi-ốp; kiểm tra thị lực qua kính tối thiểu mỗi mắt đạt 09/10, tổng thị lực hai mắt qua kính đạt từ 19/10 trở lên."
+    ],
+    "thoi_gian_tuyen_sinh": {
+      "ngay_thi": "20/09/2026",
+      "mo_ta": "Theo lịch trình tuyển sinh của Bộ Công an."
+    },
+    "pham_vi_tuyen_sinh": {
+      "toan_quoc": "T06, T07; ngành An toàn thông tin của T01.",
+      "phia_nam": "Nhóm ngành nghiệp vụ An ninh của T04; nhóm ngành nghiệp vụ Cảnh sát của T05."
+    },
+    "chi_tieu_theo_truong": [
+      {
+        "tt": 1,
+        "ten_truong": "Học viện An ninh nhân dân",
+        "ma_truong": "ANH",
+        "nhom_nganh": "Ngành An toàn thông tin",
+        "ma_nganh": "7480202",
+        "dia_ban": "Toàn quốc",
+        "tong_chi_tieu": 30,
+        "phuong_thuc_1": {
+          "nam": 13,
+          "nu": 1
+        },
+        "phuong_thuc_2": {
+          "nam": 14,
+          "nu": 2
+        }
+      },
+      {
+        "tt": 2,
+        "ten_truong": "Trường Đại học An ninh nhân dân",
+        "ma_truong": "ANS",
+        "nhom_nganh": "Nhóm ngành nghiệp vụ An ninh",
+        "ma_nganh": "7860100",
+        "dia_ban": "Phía Nam",
+        "tong_chi_tieu": 100,
+        "phuong_thuc_1": {
+          "nam": 45,
+          "nu": 5
+        },
+        "phuong_thuc_2": {
+          "nam": 45,
+          "nu": 5
+        }
+      },
+      {
+        "tt": 3,
+        "ten_truong": "Trường Đại học Cảnh sát nhân dân",
+        "ma_truong": "CSS",
+        "nhom_nganh": "Nhóm ngành nghiệp vụ Cảnh sát",
+        "ma_nganh": "7860100",
+        "dia_ban": "Phía Nam",
+        "tong_chi_tieu": 100,
+        "phuong_thuc_1": {
+          "nam": 45,
+          "nu": 5
+        },
+        "phuong_thuc_2": {
+          "nam": 45,
+          "nu": 5
+        }
+      },
+      {
+        "tt": 4,
+        "ten_truong": "Trường Đại học Phòng cháy chữa cháy",
+        "ma_truong": "PCH",
+        "nhom_nganh": "Phòng cháy chữa cháy và cứu nạn, cứu hộ",
+        "ma_nganh": "7860113",
+        "dia_ban": "Toàn quốc",
+        "tong_chi_tieu": 50,
+        "phuong_thuc_1": {
+          "nam": 22,
+          "nu": 2
+        },
+        "phuong_thuc_2": {
+          "nam": 23,
+          "nu": 3
+        }
+      },
+      {
+        "tt": 5,
+        "ten_truong": "Học viện Kỹ thuật và Công nghệ an ninh",
+        "ma_truong": "KTH",
+        "nhom_nganh": "Nhóm ngành Kỹ thuật - Hậu cần",
+        "ma_nganh": "7480200",
+        "dia_ban": "Toàn quốc",
+        "tong_chi_tieu": 50,
+        "phuong_thuc_1": {
+          "nam": 22,
+          "nu": 2
+        },
+        "phuong_thuc_2": {
+          "nam": 23,
+          "nu": 3
+        }
+      }
+    ],
+    "nganh_duoc_phep_dang_ky": [
+      "Thí sinh đăng ký dự tuyển nhóm ngành nghiệp vụ An ninh, nghiệp vụ Cảnh sát tại T01, T02, T04, T05 không quy định về lĩnh vực đào tạo, ngành đào tạo của thí sinh.",
+      "Thí sinh đăng ký dự tuyển ngành An toàn thông tin mã 7480202 tại T01 phải tốt nghiệp ngành, chuyên ngành thuộc mã lĩnh vực đào tạo Máy tính và công nghệ thông tin 748.",
+      "Thí sinh đăng ký dự tuyển ngành Phòng cháy chữa cháy và cứu nạn, cứu hộ tại T06 phải tốt nghiệp ngành, chuyên ngành thuộc các mã lĩnh vực đào tạo: Pháp luật 738, Khoa học sự sống 742, Khoa học tự nhiên 744, Toán và thống kê 746, Máy tính và công nghệ thông tin 748, Công nghệ kỹ thuật 751, Kỹ thuật 752, Kiến trúc và xây dựng 758, Sức khỏe 772, Môi trường và bảo vệ môi trường 785, Khoa học xã hội và hành vi 731, Báo chí và thông tin 732, Kinh doanh và quản lý 734.",
+      "Thí sinh đăng ký dự tuyển đào tạo tại T07 phải tốt nghiệp ngành, chuyên ngành thuộc các mã lĩnh vực đào tạo: Máy tính và công nghệ thông tin 748, Công nghệ kỹ thuật 751, Kỹ thuật 752, Pháp luật 738, Khoa học sự sống 742, Kinh doanh và quản lý 734, Kiến trúc và xây dựng 758, Sức khỏe và lĩnh vực y - dược 772, Dịch vụ xã hội 776.",
+      "Thí sinh dự tuyển Phương thức 1 được phép đăng ký dự tuyển Phương thức 2 nếu phù hợp lĩnh vực, ngành đào tạo."
     ],
     "dieu_kien_theo_phuong_thuc": {
       "phuong_thuc_1": [
         "Thí sinh là con Công an có bằng tốt nghiệp đại học loại xuất sắc.",
-        "Thí sinh tốt nghiệp đại học loại giỏi hoặc xuất sắc ở các lĩnh vực khoa học kỹ thuật, công nghệ, trí tuệ nhân tạo thuộc mã lĩnh vực 748, 751, 752.",
-        "Thí sinh tốt nghiệp đại học loại xuất sắc hoặc giỏi và có chứng chỉ ngoại ngữ quốc tế tương đương IELTS Academic từ 6.5 trở lên; riêng con đẻ của cán bộ Công an từ 6.0 trở lên.",
-        "Thí sinh tốt nghiệp đại học loại khá và có chứng chỉ ngoại ngữ quốc tế tương đương IELTS Academic từ 7.0 trở lên; riêng con đẻ của cán bộ Công an từ 6.5 trở lên.",
-        "Thí sinh tốt nghiệp đại học loại khá ngành hoặc nhóm ngành Công nghệ thông tin mã 74802 và có chứng chỉ ngoại ngữ quốc tế tương đương IELTS Academic từ 6.5 trở lên; riêng con đẻ của cán bộ Công an từ 6.0 trở lên.",
-        "Chứng chỉ ngoại ngữ quốc tế có thời hạn không quá 02 năm kể từ ngày cấp đến ngày 01/8/2026.",
-        "Thí sinh dự tuyển Phương thức 1 được phép đồng thời đăng ký dự tuyển Phương thức 2 nếu phù hợp lĩnh vực, ngành đào tạo."
+        "Thí sinh tốt nghiệp đại học loại giỏi, xuất sắc về một số ngành, chuyên ngành đào tạo thuộc lĩnh vực khoa học kỹ thuật, công nghệ, trí tuệ nhân tạo; tốt nghiệp mã lĩnh vực 748, 751, 752.",
+        "Thí sinh tốt nghiệp đại học loại xuất sắc, giỏi và có chứng chỉ ngoại ngữ quốc tế tương đương IELTS Academic đạt 6.5 trở lên; riêng con đẻ của cán bộ Công an IELTS Academic đạt 6.0 trở lên.",
+        "Thí sinh tốt nghiệp đại học loại khá và có chứng chỉ ngoại ngữ quốc tế tương đương IELTS Academic đạt 7.0 trở lên; riêng con đẻ của cán bộ Công an IELTS Academic đạt 6.5 trở lên.",
+        "Thí sinh tốt nghiệp đại học loại khá ngành hoặc nhóm ngành Công nghệ thông tin, tốt nghiệp nhóm ngành mã 74802, và có chứng chỉ ngoại ngữ quốc tế tương đương IELTS Academic đạt 6.5 trở lên; riêng con đẻ của cán bộ Công an IELTS Academic đạt 6.0 trở lên.",
+        "Chứng chỉ ngoại ngữ quốc tế có thời hạn không quá 02 năm kể từ ngày được cấp chứng chỉ đến ngày 01/08/2026."
       ],
       "phuong_thuc_2": {
+        "ten": "Thi tuyển theo hướng dẫn của Cục Đào tạo",
         "yeu_cau_chung": [
-          "Thí sinh tốt nghiệp khối ngành kỹ thuật, khoa học tự nhiên, khoa học máy tính, công nghệ thông tin theo danh mục của nhà trường.",
-          "Xếp loại bằng tốt nghiệp từ loại trung bình trở lên.",
-          "Điểm trung bình các môn thi tốt nghiệp hoặc điểm trung bình các học phần chuyên môn phải đạt mức khá trở lên, hoặc khóa luận, đồ án, báo cáo thực tập phải xếp loại đạt trở lên.",
-          "Bài thi đánh giá của Bộ Công an có thời gian làm bài 150 phút.",
-          "Ngày thi dự kiến: 20/9/2026.",
+          "Bài thi đánh giá của Bộ Công an gồm phần Tự luận và phần Trắc nghiệm.",
+          "Tổng thời gian làm bài thi là 150 phút.",
+          "Ngày thi: 20/09/2026.",
           "Hình thức thi: thi trên máy tính.",
-          "Địa điểm thi: Trụ sở chính Trường Đại học Cảnh sát nhân dân.",
-          "Ngưỡng đầu vào: điểm bài thi đánh giá của Bộ Công an đạt từ 50/100 trở lên và không có phần thi nào bị điểm liệt."
+          "Ngưỡng đầu vào: điểm bài thi đánh giá của Bộ Công an đạt từ 50 điểm trở lên theo thang điểm 100 và không có phần thi nào bị điểm liệt."
         ],
         "chung_chi_ngoai_ngu": {
           "IELTS_Academic_6_5": "Được cộng 1.0 điểm thưởng trong tuyển sinh",
           "IELTS_Academic_6_0": "Được cộng 0.5 điểm thưởng trong tuyển sinh",
-          "Con_de_can_bo_cong_an": "Được cộng 1.0 điểm thưởng; nếu có nhiều diện thưởng chỉ tính mức cao nhất",
-          "Han_chung_chi": "Chứng chỉ ngoại ngữ quốc tế dùng cho phương thức 1 phải còn hạn đến ngày 01/8/2026"
+          "Con_de_can_bo_cong_an": "Được cộng 1.0 điểm thưởng; nếu có nhiều diện điểm thưởng thì chỉ được hưởng diện điểm thưởng cao nhất",
+          "Han_chung_chi": "Chứng chỉ ngoại ngữ quốc tế dùng cho Phương thức 1 có thời hạn không quá 02 năm kể từ ngày cấp đến ngày 01/08/2026"
         }
       }
     },
@@ -81,33 +195,28 @@
       {
         "ma": 1,
         "ten": "Xét tuyển thẳng",
-        "mo_ta": "Áp dụng cho thí sinh đáp ứng một trong các điều kiện nổi trội về xếp loại đại học, ngành đào tạo, chứng chỉ ngoại ngữ hoặc diện con Công an."
+        "mo_ta": "Xét tuyển thí sinh đạt một trong các điều kiện ưu tiên về xếp loại tốt nghiệp, lĩnh vực đào tạo, chứng chỉ ngoại ngữ hoặc diện con Công an theo thông báo."
       },
       {
         "ma": 2,
-        "ten": "Thi tuyển bằng Bài thi đánh giá của Bộ Công an (VB2CA)",
-        "mo_ta": "Thi trên máy tính, thời gian 150 phút, ngày thi dự kiến 20/9/2026; điểm xét tuyển quy về thang 30 và cộng điểm ưu tiên, điểm thưởng theo quy định."
+        "ten": "Thi tuyển bằng Bài thi đánh giá của Bộ Công an",
+        "mo_ta": "Thi trên máy tính, tổng thời gian 150 phút gồm phần Tự luận và Trắc nghiệm; ngày thi 20/09/2026."
       }
     ],
-    "pham_vi_tuyen_sinh": {
-      "khu_vuc": "Phía Nam",
-      "mo_ta": "Theo phân vùng tuyển sinh của Bộ Công an, từ thành phố Đà Nẵng trở vào."
-    },
     "chi_tieu": {
-      "tong_chi_tieu": 100,
-      "phuong_thuc_1": {
-        "nam": 45,
-        "nu": 5
+      "tong_chi_tieu": 330,
+      "truong_dai_hoc_canh_sat_nhan_dan": {
+        "tong_chi_tieu": 100,
+        "phuong_thuc_1": {
+          "nam": 45,
+          "nu": 5
+        },
+        "phuong_thuc_2": {
+          "nam": 45,
+          "nu": 5
+        }
       },
-      "phuong_thuc_2": {
-        "nam": 45,
-        "nu": 5
-      },
-      "phuong_thuc_2_3": {
-        "nam": 45,
-        "nu": 5
-      },
-      "ghi_chu": "Trong schema hiện tại của test.py, chỉ tiêu của phương thức 2 được đặt vào trường phuong_thuc_2_3 để tương thích với code."
+      "ghi_chu": "Tổng chỉ tiêu 330 là tổng của 05 cơ sở trong bảng thông báo; riêng Trường Đại học Cảnh sát nhân dân có 100 chỉ tiêu nhóm ngành nghiệp vụ Cảnh sát."
     },
     "nganh_tuyen_sinh": [
       {
@@ -127,88 +236,141 @@
       }
     ],
     "ho_so_nhap_hoc": [
-      "Đơn xin tình nguyện vào ngành Công an",
-      "Bản lý lịch tự khai có xác nhận theo quy định",
-      "Bản thẩm tra lý lịch",
-      "Giấy chứng nhận sơ tuyển",
-      "Giấy chứng nhận sức khỏe hoặc phiếu khám sức khỏe",
-      "Bản chính bằng tốt nghiệp THPT, bằng tốt nghiệp đại học và bảng điểm; bằng thạc sĩ, bằng tiến sĩ, chứng chỉ ngoại ngữ quốc tế nếu có",
-      "Biên bản xét duyệt của Công an đơn vị, địa phương",
-      "Giấy tờ chứng minh đối tượng ưu tiên trong tuyển sinh",
-      "Giấy giới thiệu sinh hoạt Đoàn, Đảng",
-      "Giấy báo nhập học"
+      "Đơn đăng ký dự tuyển theo mẫu.",
+      "Bản phô tô có chứng thực Căn cước hoặc Căn cước công dân.",
+      "Giấy khai sinh.",
+      "Bằng tốt nghiệp THPT.",
+      "Bằng tốt nghiệp đại học và bảng điểm hoặc học bạ học tập đại học; trường hợp sinh viên năm cuối phải có xác nhận chuẩn bị tốt nghiệp của trường đại học.",
+      "Bằng tốt nghiệp sau đại học nếu có.",
+      "Chứng chỉ ngoại ngữ quốc tế nếu có.",
+      "Văn bằng, chứng chỉ, bảng điểm do cơ sở đào tạo nước ngoài cấp phải được dịch thuật sang tiếng Việt và được cơ quan có thẩm quyền công nhận tương đương theo quy định pháp luật."
+    ],
+    "thu_tuc_dang_ky": {
+      "noi_dang_ky": "Công dân dự tuyển đăng ký sơ tuyển tại Công an xã, phường, đặc khu nơi công dân đăng ký thường trú.",
+      "thoi_gian_dang_ky": "Từ ngày thông báo đến hết ngày 25/06/2026.",
+      "le_phi_so_tuyen": "100.000 đồng để phục vụ công tác sơ tuyển, ngoài lệ phí khám sức khỏe."
+    },
+    "xet_tuyen_va_tinh_diem": {
+      "phuong_thuc_1": [
+        "Căn cứ chỉ tiêu được giao và số lượng hồ sơ xét tuyển do Công an địa phương nộp về, các trường CAND tổ chức xét tuyển; nếu lấy hết vượt chỉ tiêu thì xét trúng tuyển theo thứ tự ưu tiên.",
+        "Ưu tiên trước hết thí sinh tốt nghiệp loại xuất sắc, sau đó thí sinh tốt nghiệp loại giỏi hoặc loại khá đối với ngành Công nghệ thông tin.",
+        "Nếu cùng xếp loại tốt nghiệp thì ưu tiên thí sinh có điểm chứng chỉ ngoại ngữ quốc tế cao hơn theo tham chiếu quy đổi.",
+        "Tiếp theo xét thí sinh có kết quả học tập ở bậc đại học cao hơn; nếu không cùng hệ điểm thì quy về thang điểm 4 để xét tuyển."
+      ],
+      "phuong_thuc_2": [
+        "Điểm xét tuyển là tổng điểm bài thi đánh giá của Bộ Công an quy về thang điểm 30, làm tròn đến 02 chữ số thập phân, cộng điểm ưu tiên khu vực, ưu tiên đối tượng theo quy chế của Bộ Giáo dục và Đào tạo và điểm thưởng theo quy định của Bộ Công an.",
+        "Công thức: ĐXT = BTBCA*3/10 + ĐC, trong đó ĐXT là điểm xét tuyển, BTBCA là điểm bài thi đánh giá của Bộ Công an, ĐC là điểm cộng.",
+        "Điểm cộng được xác định theo công thức ĐC = ĐT + KV + Đth; trong đó ĐT là điểm ưu tiên đối tượng, KV là điểm ưu tiên khu vực, Đth là điểm thưởng.",
+        "Trường hợp thí sinh đạt điểm bài thi đánh giá quy về thang điểm 30 từ 22.5 điểm trở lên thì điểm cộng được xác định theo công thức ĐC = [(30 - tổng điểm đạt được) / 7.5] x (ĐT + KV + Đth).",
+        "Nếu nhiều thí sinh cùng mức điểm xét tuyển và lấy hết sẽ vượt chỉ tiêu, xét trúng tuyển lần lượt theo điểm bài thi đánh giá của Bộ Công an, điểm Phần 1, và kết quả học tập ở bậc đại học quy về thang điểm 4."
+      ]
+    },
+    "uu_tien_trong_tuyen_sinh": [
+      "Các đối tượng ưu tiên thực hiện theo quy định về chính sách ưu tiên trong tuyển sinh theo quy định hiện hành của Bộ Giáo dục và Đào tạo.",
+      "Điểm thưởng theo quy định của Bộ Công an: IELTS Academic từ 6.5 trở lên được cộng 1.0 điểm; IELTS Academic từ 6.0 trở lên được cộng 0.5 điểm.",
+      "Thí sinh là con đẻ của cán bộ Công an được cộng 1.0 điểm.",
+      "Nếu thí sinh có nhiều diện điểm thưởng thì chỉ được hưởng diện điểm thưởng cao nhất."
+    ],
+    "thoi_gian_dia_diem_dao_tao": {
+      "thoi_gian": "02 năm, không tính thời gian huấn luyện đầu khóa.",
+      "dia_diem": "Các học viện, trường Công an nhân dân mà công dân đăng ký dự tuyển."
+    },
+    "che_do_chinh_sach": [
+      "Sau khi nhập học, học viên được hưởng phụ cấp và các chế độ, chính sách như học viên là học sinh phổ thông trúng tuyển học năm thứ 4 tại các trường Công an nhân dân.",
+      "Sau khi tốt nghiệp, học viên được xem xét phong cấp bậc hàm Trung úy nếu không vi phạm bị xử lý kỷ luật và được phân công công tác theo kế hoạch của Bộ.",
+      "Học viên đạt kết quả học tập xuất sắc được xem xét thăng cấp bậc hàm trước niên hạn theo quy định.",
+      "Đối tượng thu hút nguồn nhân lực chất lượng bên ngoài vào Công an nhân dân như công chức, viên chức nhà nước, sĩ quan quân đội, người có bằng tiến sĩ... sau khi tốt nghiệp có thể được áp dụng việc xếp lương, phong hàm tương ứng theo quy định."
     ]
   },
   "bai_thi_danh_gia_bo_cong_an": {
     "tong_so_ma_bai_thi": 4,
     "thoi_gian_lam_bai": "150 phút",
-    "ngay_thi": "20/9/2026",
+    "ngay_thi": "20/09/2026",
     "hinh_thuc_thi": "Thi trên máy tính",
-    "dia_diem_thi": "Trụ sở chính Trường Đại học Cảnh sát nhân dân",
-    "cong_thuc_tinh_diem": "ĐXT = BTBCA*3/10 + ĐT + KV + Đth",
+    "dia_diem_thi": "Theo hướng dẫn tổ chức thi của Bộ Công an và các trường CAND",
+    "cong_thuc_tinh_diem": "ĐXT = BTBCA*3/10 + ĐC",
     "nguong_dau_vao": "Đạt từ 50/100 trở lên và không có phần thi nào bị điểm liệt",
     "cac_ma_bai_thi": [
       {
         "ma": "CA1",
-        "tu_luan_bat_buoc": "Cấu trúc chi tiết sẽ được Bộ Công an và nhà trường thông báo sau",
+        "tu_luan_bat_buoc": "Theo cấu trúc bài thi đánh giá của Bộ Công an",
         "trac_nghiem_bat_buoc": [
           "Theo hướng dẫn chính thức của Bộ Công an"
         ],
-        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức kỳ thi VB2CA năm 2026"
+        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức bài thi đánh giá của Bộ Công an năm 2026"
       },
       {
         "ma": "CA2",
-        "tu_luan_bat_buoc": "Cấu trúc chi tiết sẽ được Bộ Công an và nhà trường thông báo sau",
+        "tu_luan_bat_buoc": "Theo cấu trúc bài thi đánh giá của Bộ Công an",
         "trac_nghiem_bat_buoc": [
           "Theo hướng dẫn chính thức của Bộ Công an"
         ],
-        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức kỳ thi VB2CA năm 2026"
+        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức bài thi đánh giá của Bộ Công an năm 2026"
       },
       {
         "ma": "CA3",
-        "tu_luan_bat_buoc": "Cấu trúc chi tiết sẽ được Bộ Công an và nhà trường thông báo sau",
+        "tu_luan_bat_buoc": "Theo cấu trúc bài thi đánh giá của Bộ Công an",
         "trac_nghiem_bat_buoc": [
           "Theo hướng dẫn chính thức của Bộ Công an"
         ],
-        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức kỳ thi VB2CA năm 2026"
+        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức bài thi đánh giá của Bộ Công an năm 2026"
       },
       {
         "ma": "CA4",
-        "tu_luan_bat_buoc": "Cấu trúc chi tiết sẽ được Bộ Công an và nhà trường thông báo sau",
+        "tu_luan_bat_buoc": "Theo cấu trúc bài thi đánh giá của Bộ Công an",
         "trac_nghiem_bat_buoc": [
           "Theo hướng dẫn chính thức của Bộ Công an"
         ],
-        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức kỳ thi VB2CA năm 2026"
+        "trac_nghiem_tu_chon": "Áp dụng theo thông báo tổ chức bài thi đánh giá của Bộ Công an năm 2026"
       }
     ]
   },
   "tu_khoa_goi_y": [
     "tuyển sinh",
-    "văn bằng 2",
     "vb2ca",
-    "đại học chính quy tuyển mới",
-    "đã có bằng đại học",
-    "điều kiện dự tuyển",
+    "đại học đối với công dân có bằng đại học",
+    "thông báo 56",
+    "56/TB-CAT-PX01",
+    "đối tượng dự tuyển",
+    "điều kiện tiêu chuẩn",
+    "tiêu chuẩn chính trị",
+    "tiêu chuẩn sức khỏe",
+    "chiều cao",
+    "bmi",
+    "thị lực",
+    "không quá 30 tuổi",
+    "ngày thi 20/09/2026",
+    "chỉ tiêu tuyển sinh",
+    "ANH",
+    "ANS",
+    "CSS",
+    "PCH",
+    "KTH",
+    "Trường Đại học Cảnh sát nhân dân",
+    "ngành được phép đăng ký",
+    "bài thi đánh giá",
+    "thi trên máy tính",
+    "ngưỡng đầu vào",
+    "phương thức 1",
+    "phương thức 2",
     "xét tuyển thẳng",
     "thi tuyển",
-    "bài thi đánh giá",
-    "ca1",
-    "ca2",
-    "ca3",
-    "ca4",
-    "chỉ tiêu",
-    "mã trường",
-    "mã ngành",
-    "ngành tuyển sinh",
-    "ielts",
-    "chứng chỉ ngoại ngữ",
-    "phía nam",
-    "hồ sơ nhập học",
-    "ngưỡng đầu vào"
+    "cách tính điểm",
+    "ưu tiên tuyển sinh",
+    "điểm thưởng IELTS",
+    "thời gian đào tạo",
+    "chính sách học viên",
+    "đăng ký sơ tuyển",
+    "lệ phí sơ tuyển",
+    "hạn đăng ký 25/06/2026",
+    "hồ sơ sơ tuyển",
+    "liên hệ tuyển sinh"
   ],
   "nguon": {
-    "ten_trang": "Thông báo tuyển sinh đào tạo trình độ đại học chính quy tuyển mới đối với công dân đã có bằng tốt nghiệp trình độ đại học trở lên năm 2026",
-    "url": "https://dhcsnd.edu.vn/thong-bao-tuyen-sinh-dao-tao-trinh-do-dai-hoc-chinh-quy-tuyen-moi-doi-voi-cong-dan-da-co-bang-tot-nghiep-trinh-do-dai-hoc-tro-len-nam-2026",
-    "ngay_truy_cap": "2026-04-14"
+    "ten_trang": "Thông báo số 56/TB-CAT-PX01 ngày 19/03/2026 về tuyển sinh tuyển mới đại học đối với công dân có bằng tốt nghiệp trình độ đại học trở lên (VB2CA) năm 2026",
+    "co_quan_ban_hanh": "Cục X02 - Bộ Công an",
+    "file_pdf": "thong_tu/tuyen_sinh_2026.pdf",
+    "ngay_truy_cap": "2026-04-21",
+    "ghi_chu": "Nội dung tuyển sinh được xây dựng theo file PDF tuyen_sinh_2026.pdf; riêng thông tin liên hệ hiển thị theo Trường Đại học Cảnh sát nhân dân."
   }
 }

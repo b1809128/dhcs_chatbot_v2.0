@@ -76,7 +76,16 @@
     {
       "ten": "Đơn xin phép",
       "mo_ta": "Dùng khi xin nghỉ học, xin ra ngoài",
-      "noi_dung_mau": "Kính gửi: ... Tôi tên là ... xin phép được nghỉ ... vì lý do ..."
+      "noi_dung_mau": "Kính gửi: ... Tôi tên là ... xin phép được nghỉ ... vì lý do ...",
+      "file_word": "word_don_xin_nghi/nghi_phep.docx",
+      "tom_tat": "Biểu mẫu đơn xin nghỉ phép dùng khi học viên xin nghỉ học hoặc xin ra ngoài theo quy định.",
+      "tu_khoa": [
+        "đơn xin phép",
+        "đơn xin nghỉ phép",
+        "don xin phep",
+        "don xin nghi phep",
+        "nghi_phep"
+      ]
     },
     {
       "ten": "Đơn nghỉ tranh thủ",

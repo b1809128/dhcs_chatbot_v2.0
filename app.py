@@ -1,4 +1,5 @@
 import os
+import mimetypes
 
 from flask import (
     Flask,
@@ -46,14 +47,31 @@ def favicon():
 @app.route("/documents/<path:filename>")
 def serve_document(filename: str):
     try:
+        mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
         return send_from_directory(
             DATA_PDF_DIR,
             filename,
-            mimetype="application/pdf",
+            mimetype=mimetype,
             max_age=0,
         )
     except NotFound:
-        return jsonify({"error": "Không tìm thấy tài liệu PDF."}), 404
+        return jsonify({"error": "Không tìm thấy tài liệu."}), 404
+
+
+@app.route("/documents/download/<path:filename>")
+def download_document(filename: str):
+    try:
+        mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+        return send_from_directory(
+            DATA_PDF_DIR,
+            filename,
+            mimetype=mimetype,
+            as_attachment=True,
+            download_name=os.path.basename(filename),
+            max_age=0,
+        )
+    except NotFound:
+        return jsonify({"error": "Không tìm thấy tài liệu để tải về."}), 404
 
 
 @app.route("/")

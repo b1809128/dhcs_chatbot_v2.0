@@ -3,6 +3,7 @@ from typing import Optional
 from .keywords import DOCUMENT_KEYWORDS
 from .types import JsonDict, StructuredContext
 from .utils import (
+    build_document_file_context,
     build_pdf_document_context,
     build_table_context,
     build_text_context,
@@ -42,6 +43,26 @@ def _build_pdf_document(item: JsonDict, document_type: str) -> StructuredContext
         co_quan_ban_hanh=item.get("co_quan_ban_hanh", ""),
         file_url=_build_document_file_url(file_path),
         file_name=_build_document_file_name(file_path),
+    )
+
+
+def _build_word_form_document(item: JsonDict) -> StructuredContext:
+    file_path = item.get("file_word", "")
+    description_parts = [
+        item.get("tom_tat") or item.get("mo_ta", ""),
+        item.get("noi_dung_mau", ""),
+    ]
+    description = "\n\n".join(part for part in description_parts if part)
+
+    return build_document_file_context(
+        "BIỂU MẪU / ĐƠN",
+        document_type="Biểu mẫu Word",
+        name=item.get("ten", ""),
+        description=description,
+        file_url=_build_document_file_url(file_path),
+        file_name=_build_document_file_name(file_path),
+        file_type="docx",
+        download_url=f"/documents/download/{file_path}" if file_path else "",
     )
 
 
@@ -203,11 +224,20 @@ def build_document_context(query: str) -> Optional[StructuredContext]:
             (
                 item
                 for item in items
-                if item.get("ten", "").lower() and item.get("ten", "").lower() in query
+                if any(
+                    keyword and keyword in query
+                    for keyword in [
+                        item.get("ten", "").lower(),
+                        *(value.lower() for value in item.get("tu_khoa", [])),
+                    ]
+                )
             ),
             None,
         )
         if matched_item:
+            if matched_item.get("file_word"):
+                return _build_word_form_document(matched_item)
+
             return build_table_context(
                 "BIỂU MẪU / ĐƠN",
                 ["Tên biểu mẫu", "Mô tả", "Nội dung mẫu"],

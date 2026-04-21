@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from .admission_suggestions import ADMISSION_TITLES, get_admission_suggestions
 from .types import StructuredContext
 from .utils import contains_any
 
@@ -75,70 +76,8 @@ def get_contextual_suggestions(query: str, data: Optional[StructuredContext]) ->
             "Giáo trình Luật Hình sự",
         ]
 
-    if title in {
-        "TUYỂN SINH",
-        "BÀI THI ĐÁNH GIÁ",
-        "HỒ SƠ TUYỂN SINH",
-        "NGÀNH TUYỂN SINH",
-        "THÔNG TIN TRƯỜNG",
-        "LIÊN HỆ TUYỂN SINH",
-    }:
-        if "chỉ tiêu" in normalized_query:
-            return [
-                "Phương thức tuyển sinh",
-                "Điều kiện dự tuyển",
-                "Hồ sơ nhập học",
-                "Ngành tuyển sinh",
-                "Bài thi VB2CA",
-                "Ngưỡng đầu vào",
-                "Chứng chỉ IELTS",
-                "Mã trường CSS",
-            ]
-        if contains_any(normalized_query, ["vb2ca", "bài thi", "ca1", "ca2", "ca3", "ca4"]):
-            return [
-                "Ngưỡng đầu vào",
-                "Chứng chỉ IELTS",
-                "Hồ sơ nhập học",
-                "Mã trường CSS",
-                "Chỉ tiêu tuyển sinh",
-                "Phương thức tuyển sinh",
-                "Ngành tuyển sinh",
-                "Liên hệ tuyển sinh",
-            ]
-        if contains_any(normalized_query, ["hồ sơ", "nhập học"]):
-            return [
-                "Điều kiện dự tuyển",
-                "Chỉ tiêu tuyển sinh",
-                "Phương thức tuyển sinh",
-                "Ngành tuyển sinh",
-                "Bài thi VB2CA",
-                "Chứng chỉ IELTS",
-                "Mã trường CSS",
-                "Liên hệ tuyển sinh",
-            ]
-        if contains_any(normalized_query, ["mã trường", "css", "liên hệ", "email"]):
-            return [
-                "Chỉ tiêu tuyển sinh",
-                "Phương thức tuyển sinh",
-                "Điều kiện dự tuyển",
-                "Hồ sơ nhập học",
-                "Ngành tuyển sinh",
-                "Bài thi VB2CA",
-                "Ngưỡng đầu vào",
-                "Chứng chỉ IELTS",
-            ]
-        return [
-            "Chỉ tiêu tuyển sinh",
-            "Phương thức tuyển sinh",
-            "Điều kiện dự tuyển",
-            "Hồ sơ nhập học",
-            "Ngành tuyển sinh",
-            "Bài thi VB2CA",
-            "Chứng chỉ IELTS",
-            "Mã trường CSS",
-            "Ngưỡng đầu vào",
-            "Liên hệ tuyển sinh",
-        ]
+    if title in ADMISSION_TITLES:
+        return get_admission_suggestions(normalized_query, title)
 
     if title == "TÀI LIỆU NGHIỆP VỤ":
         return [

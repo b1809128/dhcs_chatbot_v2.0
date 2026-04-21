@@ -37,7 +37,7 @@
   <body data-authenticated="{{ 'true' if is_authenticated else 'false' }}">
     <div class="gov-topbar">
       <div class="gov-topbar-inner">
-        <span class="gov-topbar-label">Cổng thông tin hỗ trợ học viên</span>
+        <span class="gov-topbar-label">Cổng thông tin Trường Đại học Cảnh sát Nhân dân</span>
         <span class="gov-topbar-divider"></span>
         <span class="gov-topbar-meta">Tra cứu tuyển sinh, lịch học, thư viện, biểu mẫu và văn bản</span>
       </div>
@@ -74,7 +74,7 @@
         />
 
         <div class="title chatbot-hero-copy">
-          <div class="main chatbot-hero-title">TRỢ LÝ THÔNG TIN HỌC VIÊN</div>
+          <div class="main chatbot-hero-title">TRỢ LÝ AI THÔNG TIN HỌC VIÊN</div>
           <div class="sub chatbot-hero-subtitle">
             Phục vụ tra cứu thông tin học tập, tuyển sinh và văn bản nghiệp vụ
           </div>
@@ -220,7 +220,7 @@
 
       <div class="doc-sidebar-actions">
         <button type="button" class="doc-primary-btn" id="doc-open-modal-btn">
-          Xem file PDF
+          Xem nhanh
         </button>
         <a
           href="#"
@@ -230,6 +230,14 @@
           rel="noopener noreferrer"
         >
           Mở tab mới
+        </a>
+        <a
+          href="#"
+          class="doc-secondary-btn"
+          id="doc-download-link"
+          download
+        >
+          Tải về
         </a>
       </div>
     </aside>
@@ -253,11 +261,26 @@
         </div>
 
         <div class="pdf-modal-body">
+          <div
+            id="pdf-modal-fallback"
+            class="pdf-modal-fallback"
+            hidden
+          ></div>
           <iframe
             id="pdf-modal-frame"
             class="pdf-modal-frame"
             title="Xem tài liệu PDF"
           ></iframe>
+        </div>
+        <div class="pdf-modal-actions">
+          <a
+            href="#"
+            class="doc-primary-btn"
+            id="pdf-modal-download"
+            download
+          >
+            Tải về
+          </a>
         </div>
       </div>
     </div>

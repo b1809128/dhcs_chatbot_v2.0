@@ -107,6 +107,8 @@ Các file chính:
   - hiển thị loading `Đang tìm kiếm` trong lúc đợi phản hồi
   - cuộn mượt đến phần đầu câu trả lời mới
   - bảng `THÔNG TƯ` có thao tác `Xem tóm tắt` và `Mở PDF` ngay trên từng dòng
+  - bộ tài liệu như `Bài thi VB2CA` được render thành nhiều card tài liệu có nút xem nhanh và tải về
+  - file Word hiển thị màn hình xem nhanh nội dung mẫu, kèm nút mở tab mới và tải về
 - `static/image/*`: logo, avatar chatbot, favicon
 
 ### `services/`
@@ -161,22 +163,79 @@ Các file quan trọng:
   - match tài liệu PDF pháp lý theo `so_hieu`, `file_pdf`, `tu_khoa`
   - nếu hỏi chung `thông tư`, chatbot có thể trả bảng `THÔNG TƯ` với truy cập nhanh đến PDF
   - nếu dữ liệu `luật` hiện chỉ có 1 văn bản, câu hỏi chung như `luật ban hành` có thể trả trực tiếp `pdf_document`
+  - nếu hỏi `đơn xin nghỉ phép`, chatbot trả `document_file` trỏ đến file Word trong `data/pdf/word_don_xin_nghi/`
 
 - `library_context.py`
   - xử lý tra cứu sách, giờ mở cửa, liên hệ thư viện, quy định mượn trả, tài liệu đọc tại chỗ
 
 - `admission_context.py`
-  - xử lý tuyển sinh: chỉ tiêu, phương thức, điều kiện, chứng chỉ, VB2CA, hồ sơ, ngành, thông tin trường
+  - router intent tuyển sinh 2026 theo dữ liệu trong `data/json/tuyen_sinh.json`
+  - nội dung tuyển sinh được dựng lại theo file `data/pdf/thong_tu/tuyen_sinh_2026.pdf`
+  - thông tin liên hệ tuyển sinh vẫn dùng dữ liệu của Trường Đại học Cảnh sát nhân dân
+  - xử lý các nhóm câu hỏi như chỉ tiêu, đối tượng, điều kiện, sức khỏe, chiều cao, BMI, thị lực, phương thức, ưu tiên, cách tính điểm, hồ sơ, sơ tuyển, lệ phí, hạn đăng ký, ngành được phép đăng ký, bài thi VB2CA, thông tin trường
+  - mục `Bài thi VB2CA` trả `document_collection` gồm 4 file PDF CA1, CA2, CA3, CA4 trong `data/pdf/de_thi/`
+
+- `admission_helpers.py`
+  - chuẩn hóa câu hỏi tuyển sinh, gồm có dấu/không dấu và alias như `văn bằng hai`, `bằng đại học thứ 2`, `vb 2`
+  - nhận diện mã trường như `CSS`
+  - gắn ghi chú nguồn từ `tuyen_sinh.json` và PDF tuyển sinh
+
+- `admission_precheck.py`
+  - phân tích câu hỏi tư vấn cá nhân hóa như `em tốt nghiệp CNTT loại khá, cao 1m62 có đăng ký CSS được không`
+  - dựng bảng `KIỂM TRA SƠ BỘ ĐIỀU KIỆN`
+  - kiểm tra sơ bộ tuổi, chiều cao, BMI, xếp loại bằng, ngành tốt nghiệp, IELTS/chứng chỉ và trường muốn đăng ký
+
+- `admission_views.py`
+  - dựng các view structured cho tuyển sinh:
+    - tổng quan văn bằng 2
+    - tóm tắt tuyển sinh VB2CA 2026
+    - timeline tuyển sinh
+    - checklist hồ sơ
+    - so sánh phương thức tuyển sinh
+    - tài liệu/hành động tuyển sinh
+    - đề thi VB2CA CA1-CA4
 
 - `study_material_context.py`
   - xử lý hỗ trợ học tập như giải thích, tóm tắt, câu hỏi ôn tập
 
 - `suggestion_service.py`
-  - sinh 4 câu hỏi gợi ý theo đúng ngữ cảnh câu trả lời
+  - sinh câu hỏi gợi ý theo đúng ngữ cảnh câu trả lời
+  - điều phối gợi ý chung cho lịch, văn bản, thư viện, tài liệu học tập và tuyển sinh
+
+- `admission_suggestions.py`
+  - chứa riêng toàn bộ gợi ý câu hỏi liên quan cho tuyển sinh
+  - map từng title tuyển sinh sang nhóm gợi ý phù hợp để người dùng đi đúng luồng
 
 - `llm_service.py`
   - gọi Ollama
   - chỉ dùng khi không có structured response phù hợp
+
+- `rag_service.py`
+  - façade mỏng cho RAG
+  - public API chính là `build_rag_context()`
+
+- `rag_documents.py`
+  - build/chunk tài liệu RAG từ các file JSON nội bộ
+  - index thêm metadata PDF/Word để frontend có thể hiển thị `references`, nút xem và nút tải
+  - với tuyển sinh, index các phần như thông báo, đối tượng, điều kiện, sức khỏe, phạm vi, chỉ tiêu, ngành, hồ sơ, thủ tục, cách tính điểm, ưu tiên, đào tạo và bài thi
+
+- `rag_index.py`
+  - chuẩn hóa/tokenize text
+  - build TF-IDF sparse index
+  - serialize/load/write `data/index/rag_index.json`
+
+- `rag_retrieval.py`
+  - score document
+  - tính cosine similarity
+  - retrieve/rank documents theo query
+
+- `scripts/build_rag_index.py`
+  - rebuild file `data/index/rag_index.json`
+  - cần chạy lại sau khi sửa dữ liệu JSON hoặc thêm tài liệu muốn RAG tìm thấy
+
+- `query_guards.py`
+  - chứa guard dùng chung, hiện có `is_admission_query()`
+  - giúp các domain như thư viện/tài liệu học tập không bắt nhầm câu hỏi tuyển sinh
 
 #### `services/lich_hoc_service.py`
 
@@ -237,14 +296,15 @@ Payload dạng:
 Trong `app.py`:
 - đọc `message`
 - gọi `build_chat_response(question)`
-- phục vụ file PDF qua route `/documents/<path:filename>`
+- phục vụ file tài liệu qua route `/documents/<path:filename>`
+- phục vụ tải file qua route `/documents/download/<path:filename>`
 
 ### 3. `chat_service.py` điều phối xử lý
 
 Luồng cơ bản:
 1. chuẩn hóa câu hỏi
 2. gọi `build_direct_context()`
-3. nếu kết quả là `table`, `list` hoặc `pdf_document` thì trả structured response thẳng cho frontend
+3. nếu kết quả là `table`, `list`, `pdf_document`, `document_file` hoặc `document_collection` thì trả structured response thẳng cho frontend
 4. nếu có `structured_data` nhưng không thuộc nhóm trả thẳng, gọi `build_rag_context(preferred_context=structured_data)` để ưu tiên dựng context từ dữ liệu đã match
 5. nếu chưa có đủ context thì fallback sang `format_context_data(structured_data)` hoặc `build_context()`
 6. gửi context cuối cùng sang `ask_ollama()`
@@ -266,6 +326,8 @@ Ghi chú:
   - `list`
   - `text`
   - `pdf_document`
+  - `document_file`
+  - `document_collection`
 - hiển thị 4 câu hỏi gợi ý tiếp theo
 - nếu là `pdf_document` thì cho phép:
   - mở sidebar tóm tắt
@@ -273,6 +335,8 @@ Ghi chú:
 - nếu là bảng `THÔNG TƯ` thì cho phép:
   - `Xem tóm tắt` ngay trên từng dòng
   - `Mở PDF` ngay trên từng dòng
+- nếu là `document_collection` thì render thành nhiều card tài liệu, ví dụ 4 đề thi VB2CA
+- nếu là `document_file` dạng Word thì hiển thị phần xem nhanh nội dung mẫu và nút tải về
 - sau khi render, khung chat sẽ cuộn mượt tới phần đầu câu trả lời mới
 
 ## Dạng phản hồi của backend
@@ -409,6 +473,18 @@ Compile kiểm tra cú pháp:
 python3 -m py_compile app.py services/chatbot/*.py tests/*.py
 ```
 
+Kiểm tra cú pháp JavaScript frontend:
+
+```bash
+node --check static/js/script.js
+```
+
+Build lại RAG index sau khi cập nhật dữ liệu:
+
+```bash
+python3 scripts/build_rag_index.py
+```
+
 ## Cách cập nhật dữ liệu
 
 ### Khi chỉ thay đổi nội dung
@@ -420,7 +496,58 @@ Ví dụ:
 - đổi lịch học: sửa `data/json/lich_hoc.json`
 - cập nhật tuyển sinh: sửa `data/json/tuyen_sinh.json`
 
-Thông thường không cần đổi frontend nếu cấu trúc field cũ vẫn được giữ.
+Thông thường không cần đổi frontend nếu cấu trúc field cũ vẫn được giữ. Nếu dữ liệu đó cần được RAG tìm kiếm hoặc hiển thị trong `Tài liệu tham khảo`, chạy lại:
+
+```bash
+python3 scripts/build_rag_index.py
+```
+
+### Khi cập nhật tuyển sinh 2026
+
+Nguồn chính hiện tại:
+- PDF gốc: `data/pdf/thong_tu/tuyen_sinh_2026.pdf`
+- Dữ liệu chatbot đọc: `data/json/tuyen_sinh.json`
+- Router trả lời structured: `services/chatbot/admission_context.py`
+- Helper tuyển sinh: `services/chatbot/admission_helpers.py`
+- Kiểm tra sơ bộ điều kiện: `services/chatbot/admission_precheck.py`
+- View/bảng tuyển sinh: `services/chatbot/admission_views.py`
+- Từ khóa nhận diện intent: `services/chatbot/keywords.py`
+- Gợi ý câu hỏi liên quan tuyển sinh: `services/chatbot/admission_suggestions.py`
+- RAG documents/index/retrieval:
+  - `services/chatbot/rag_documents.py`
+  - `services/chatbot/rag_index.py`
+  - `services/chatbot/rag_retrieval.py`
+  - `data/index/rag_index.json`
+
+Quy trình nên làm:
+1. Đọc PDF hoặc thông báo mới, xác định nội dung thay đổi.
+2. Sửa `data/json/tuyen_sinh.json` trước, vì đây là nguồn dữ liệu chính.
+3. Nếu có nhóm câu hỏi mới, thêm keyword vào `services/chatbot/keywords.py`.
+4. Nếu muốn chatbot trả bảng/list/card trực tiếp, ưu tiên thêm builder trong `services/chatbot/admission_views.py` rồi route trong `services/chatbot/admission_context.py`.
+5. Nếu muốn cập nhật logic tư vấn cá nhân hóa, sửa `services/chatbot/admission_precheck.py`.
+6. Nếu muốn người dùng thấy nhiều câu hỏi gợi ý hơn, cập nhật `services/chatbot/admission_suggestions.py`.
+7. Nếu thêm field mới cần RAG tìm thấy, cập nhật `_chunk_tuyen_sinh()` trong `services/chatbot/rag_documents.py`.
+8. Chạy `python3 scripts/build_rag_index.py`.
+9. Chạy test backend và kiểm tra nhanh vài câu hỏi thực tế.
+
+Ví dụ câu hỏi nên test sau khi sửa tuyển sinh:
+- `đối tượng dự tuyển VB2CA`
+- `tuyển sinh văn bằng hai`
+- `chiều cao dự tuyển`
+- `BMI tuyển sinh`
+- `lệ phí sơ tuyển`
+- `hạn đăng ký 25/06/2026`
+- `ngày thi tuyển sinh VB2CA`
+- `ngành được phép đăng ký`
+- `chỉ tiêu Trường Đại học Cảnh sát nhân dân`
+- `chỉ tiêu CSS`
+- `em tốt nghiệp CNTT loại khá, cao 1m62 có đăng ký CSS được không`
+- `liên thông văn bằng 2 có tuyển không`
+- `timeline tuyển sinh`
+- `checklist hồ sơ sơ tuyển`
+- `so sánh phương thức tuyển sinh`
+- `cách tính điểm xét tuyển`
+- `điểm thưởng IELTS`
 
 ### Khi thêm loại câu hỏi mới
 
@@ -428,7 +555,10 @@ Thường sẽ cần cập nhật ở 3 nơi:
 
 1. `services/chatbot/keywords.py`
 2. file domain tương ứng trong `services/chatbot/*_context.py`
-3. `services/chatbot/suggestion_service.py` hoặc `static/js/script.js`
+3. service gợi ý phù hợp:
+   - tuyển sinh: `services/chatbot/admission_suggestions.py`
+   - domain chung: `services/chatbot/suggestion_service.py`
+   - fallback frontend: `static/js/script.js`
 
 ### Khi muốn chatbot trả lời trực tiếp thay vì qua LLM
 
@@ -454,18 +584,20 @@ Nguyên tắc nên giữ:
 - không nhồi thêm logic mới vào `app.py`
 - ưu tiên tái sử dụng helper trong `utils.py`
 - keyword mới nên đưa vào `keywords.py`
-- gợi ý ngữ cảnh nên ưu tiên `suggestion_service.py`
+- gợi ý ngữ cảnh tuyển sinh nên ưu tiên `admission_suggestions.py`
+- gợi ý ngữ cảnh chung nên ưu tiên `suggestion_service.py`
 
 ## Điểm mở rộng tiếp theo
 
 Một số hướng phát triển tiếp:
-- tách sâu hơn `library_context.py` và `admission_context.py` thành nhiều hàm private theo intent
 - thêm `requirements.txt`
 - thêm test cho frontend
 - thêm logging
 - thêm cache dữ liệu JSON
 - thêm support database thật thay vì chỉ JSON
 - thêm API versioning nếu hệ thống mở rộng lớn hơn
+- tách tiếp `library_context.py` thành các builder nhỏ nếu dữ liệu thư viện mở rộng
+- thêm cơ chế phát hiện thay đổi JSON để tự rebuild RAG index
 
 ## Tóm tắt nhanh để onboard
 
@@ -475,8 +607,10 @@ Nếu bạn mới vào dự án, hãy đọc theo thứ tự này:
 2. `services/chatbot/chat_service.py`
 3. `services/chatbot/context_builders.py`
 4. domain bạn cần sửa, ví dụ `library_context.py`
-5. `static/js/script.js`
-6. file JSON tương ứng trong `data/json/`
-7. test domain tương ứng trong `tests/`
+5. nếu sửa tuyển sinh, đọc thêm `admission_context.py`, `admission_views.py`, `admission_precheck.py`, `admission_suggestions.py`
+6. nếu sửa RAG, đọc thêm `rag_documents.py`, `rag_index.py`, `rag_retrieval.py`, `rag_service.py`
+7. `static/js/script.js`
+8. file JSON tương ứng trong `data/json/`
+9. test domain tương ứng trong `tests/`
 
 Chỉ cần nắm chuỗi đó là đã có thể bắt đầu sửa tính năng khá an toàn.

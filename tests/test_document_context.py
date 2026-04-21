@@ -9,8 +9,23 @@ class DocumentContextTests(unittest.TestCase):
 
         self.assertIsNotNone(result)
         self.assertEqual(result["title"], "BIỂU MẪU / ĐƠN")
-        self.assertEqual(result["type"], "table")
-        self.assertEqual(result["rows"][0]["ten"], "Đơn xin phép")
+        self.assertEqual(result["type"], "document_file")
+        self.assertEqual(result["name"], "Đơn xin phép")
+        self.assertEqual(
+            result["file_url"],
+            "/documents/word_don_xin_nghi/nghi_phep.docx",
+        )
+
+    def test_returns_word_form_for_don_xin_nghi_phep(self):
+        result = build_document_context("đơn xin nghỉ phép")
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["type"], "document_file")
+        self.assertEqual(result["file_type"], "docx")
+        self.assertEqual(
+            result["download_url"],
+            "/documents/download/word_don_xin_nghi/nghi_phep.docx",
+        )
 
     def test_returns_documents_for_cong_van(self):
         result = build_document_context("công văn")

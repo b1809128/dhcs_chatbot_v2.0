@@ -6,7 +6,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from services.chatbot.rag_service import load_rag_index  # noqa: E402
+from services.chatbot.rag_index import load_rag_index  # noqa: E402
 
 
 def main() -> None:

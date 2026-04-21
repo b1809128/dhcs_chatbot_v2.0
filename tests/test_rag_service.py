@@ -1,8 +1,9 @@
 import unittest
-from pathlib import Path
 
 from services.chatbot.config import INDEX_DIR
-from services.chatbot.rag_service import build_rag_context, build_rag_documents, load_rag_index
+from services.chatbot.rag_documents import build_rag_documents
+from services.chatbot.rag_index import load_rag_index
+from services.chatbot.rag_service import build_rag_context
 
 
 class RagServiceTests(unittest.TestCase):

@@ -1,6 +1,7 @@
 from typing import Optional
 
-from .keywords import ADMISSION_PRIORITY_KEYWORDS, LIBRARY_KEYWORDS
+from .keywords import LIBRARY_KEYWORDS
+from .query_guards import is_admission_query
 from .types import StructuredContext
 from .utils import (
     build_table_context,
@@ -8,10 +9,6 @@ from .utils import (
     find_books_by_name,
     load_data,
 )
-
-
-def is_admission_query(text: str) -> bool:
-    return contains_any(text, ADMISSION_PRIORITY_KEYWORDS)
 
 
 def build_library_context(query: str) -> Optional[StructuredContext]:

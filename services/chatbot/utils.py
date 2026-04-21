@@ -98,18 +98,61 @@ def build_pdf_document_context(
     }
 
 
+def build_document_file_context(
+    title: str,
+    *,
+    document_type: str,
+    name: str,
+    description: str = "",
+    file_url: str = "",
+    file_name: str = "",
+    file_type: str = "",
+    download_url: str = "",
+) -> StructuredContext:
+    return {
+        "type": "document_file",
+        "title": title,
+        "document_type": document_type,
+        "name": name,
+        "noi_dung": description,
+        "tom_tat": description,
+        "file_url": file_url,
+        "file_name": file_name,
+        "file_type": file_type,
+        "download_url": download_url or file_url,
+    }
+
+
+def build_document_collection_context(
+    title: str,
+    *,
+    description: str,
+    documents: List[JsonDict],
+) -> StructuredContext:
+    return {
+        "type": "document_collection",
+        "title": title,
+        "description": description,
+        "documents": documents,
+    }
+
+
 def format_context_data(data: StructuredContext) -> str:
     context_type = data.get("type")
     title = data.get("title", "")
+    source_note = data.get("source_note", "")
 
     if context_type == "text":
         message = data.get("message", "")
-        return f"=== {title} ===\n{message}" if title else message
+        body = f"=== {title} ===\n{message}" if title else message
+        return f"{body}\n{source_note}" if source_note else body
 
     if context_type == "list":
         lines = [f"=== {title} ==="] if title else []
         for item in data.get("items", []):
             lines.append(f"- {item}")
+        if source_note:
+            lines.append(source_note)
         return "\n".join(lines)
 
     if context_type == "table":
@@ -119,6 +162,8 @@ def format_context_data(data: StructuredContext) -> str:
             lines.append(" | ".join(columns))
         for row in data.get("rows", []):
             lines.append(" | ".join(str(value) for value in row.values()))
+        if source_note:
+            lines.append(source_note)
         return "\n".join(lines)
 
     if context_type == "pdf_document":
@@ -130,6 +175,29 @@ def format_context_data(data: StructuredContext) -> str:
             lines.append(f"Ngày hiệu lực: {data.get('ngay_hieu_luc', '')}")
         if data.get("tom_tat"):
             lines.append(f"Tóm tắt: {data.get('tom_tat', '')}")
+        if source_note:
+            lines.append(source_note)
+        return "\n".join(lines)
+
+    if context_type == "document_file":
+        lines = [f"=== {title} ==="] if title else []
+        lines.append(f"Tên tài liệu: {data.get('name', '')}")
+        if data.get("tom_tat"):
+            lines.append(f"Tóm tắt: {data.get('tom_tat', '')}")
+        if data.get("file_name"):
+            lines.append(f"File: {data.get('file_name', '')}")
+        if source_note:
+            lines.append(source_note)
+        return "\n".join(lines)
+
+    if context_type == "document_collection":
+        lines = [f"=== {title} ==="] if title else []
+        if data.get("description"):
+            lines.append(data.get("description", ""))
+        for item in data.get("documents", []):
+            lines.append(f"- {item.get('name', '')}: {item.get('file_name', '')}")
+        if source_note:
+            lines.append(source_note)
         return "\n".join(lines)
 
     return ""

@@ -108,7 +108,7 @@ def _build_professional_context(query: str, data: dict, ts: dict) -> Optional[St
 
 
 def _build_notice_context(query: str, data: dict) -> Optional[StructuredContext]:
-    if not contains_any(query, ["thông báo 56", "56/tb-cat-px01", "56/TB-CAT-PX01", "thông báo tuyển"]):
+    if not contains_any(query, ["thông báo 56", "56/TB-X02", "56/TB-X02", "thông báo tuyển"]):
         return None
 
     thong_bao = data.get("thong_bao_tuyen_sinh", {})

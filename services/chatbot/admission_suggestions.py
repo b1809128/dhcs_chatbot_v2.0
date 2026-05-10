@@ -4,7 +4,7 @@ from .utils import contains_any
 
 
 ADMISSION_OVERVIEW_SUGGESTIONS = [
-    "Thông báo 56/TB-CAT-PX01",
+    "Thông báo 56/TB-X02",
     "Đối tượng dự tuyển VB2CA",
     "Điều kiện trình độ đào tạo",
     "Không quá 30 tuổi",

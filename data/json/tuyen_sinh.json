@@ -32,7 +32,7 @@
     "viec_lam_sau_tot_nghiep": "Sau khi tốt nghiệp, học viên được xem xét phong cấp bậc hàm Trung úy nếu không vi phạm bị xử lý kỷ luật và được phân công công tác theo kế hoạch của Bộ Công an."
   },
   "thong_bao_tuyen_sinh": {
-    "so_hieu": "56/TB-CAT-PX01",
+    "so_hieu": "56/TB-X02",
     "co_quan_ban_hanh": "Công an tỉnh An Giang",
     "ngay_ban_hanh": "19/03/2026",
     "ten_thong_bao": "Thông báo tuyển sinh tuyển mới đại học đối với công dân có bằng tốt nghiệp trình độ đại học trở lên (VB2CA) năm 2026",
@@ -330,7 +330,7 @@
     "vb2ca",
     "đại học đối với công dân có bằng đại học",
     "thông báo 56",
-    "56/TB-CAT-PX01",
+    "56/TB-X02",
     "đối tượng dự tuyển",
     "điều kiện tiêu chuẩn",
     "tiêu chuẩn chính trị",
@@ -367,7 +367,7 @@
     "liên hệ tuyển sinh"
   ],
   "nguon": {
-    "ten_trang": "Thông báo số 56/TB-CAT-PX01 ngày 19/03/2026 về tuyển sinh tuyển mới đại học đối với công dân có bằng tốt nghiệp trình độ đại học trở lên (VB2CA) năm 2026",
+    "ten_trang": "Thông báo số 56/TB-X02 ngày 19/03/2026 về tuyển sinh tuyển mới đại học đối với công dân có bằng tốt nghiệp trình độ đại học trở lên (VB2CA) năm 2026",
     "co_quan_ban_hanh": "Cục X02 - Bộ Công an",
     "file_pdf": "thong_tu/tuyen_sinh_2026.pdf",
     "ngay_truy_cap": "2026-04-21",

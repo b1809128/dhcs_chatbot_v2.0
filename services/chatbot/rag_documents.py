@@ -105,7 +105,7 @@ def _chunk_tuyen_sinh() -> List[RagDocument]:
             "thong-bao",
             "Thông báo tuyển sinh VB2CA 2026",
             data.get("thong_bao_tuyen_sinh", {}),
-            ["thông báo 56", "56/TB-CAT-PX01", "VB2CA", "tuyển sinh 2026"],
+            ["thông báo 56", "56/TB-X02", "VB2CA", "tuyển sinh 2026"],
         ),
         (
             "doi-tuong-du-tuyen",

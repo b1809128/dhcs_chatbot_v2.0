@@ -201,7 +201,7 @@ ADMISSION_KEYWORDS = [
     "liên thông",
     "20/09/2026",
     "thông báo 56",
-    "56/TB-CAT-PX01",
+    "56/TB-X02",
 ]
 
 ADMISSION_PRIORITY_KEYWORDS = [
